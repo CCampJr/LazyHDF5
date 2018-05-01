@@ -15,11 +15,11 @@ except:
     flag_has_pyQt5 = False
 else:
     flag_has_pyQt5 = True
+    from lazy5.ui.QtHdfLoad import HDFLoad
 
 from lazy5.utils import hdf_is_open
-from lazy5.ui.QtHdfLoad import HDFLoad
 
-@pytest.mark.skipif(flag_has_pyQt5 == False, reason='PyQt5 not installed, skipping.')
+@pytest.mark.skipif(not flag_has_pyQt5, reason='PyQt5 not installed, skipping.')
 class TestUI:
     """     """
     @pytest.fixture(scope="module")
