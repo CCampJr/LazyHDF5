@@ -19,16 +19,20 @@ HDF5 LOAD DATA QDialog (crikit.vis.subguis.h5loadgui)
 import sys as _sys
 import os as _os
 
-# Generic imports for QT-based programs
-from PyQt5.QtWidgets import (QApplication as _QApplication, \
-QDialog as _QDialog, QFileDialog as _QFileDialog, \
-QTableWidgetItem as _QTableWidgetItem)
-
+try:
+    # Generic imports for QT-based programs
+    from PyQt5.QtWidgets import (QApplication as _QApplication, \
+    QDialog as _QDialog, QFileDialog as _QFileDialog, \
+    QTableWidgetItem as _QTableWidgetItem)
+except:
+    has_PyQt5 = False
+else:
+    has_PyQt5 = True
+    from lazy5.ui.qt_HDFLoad import Ui_Dialog
 # import numpy as _np
 
 from lazy5.inspect import get_hierarchy, get_attrs_dset
 from lazy5.nonh5utils import filterlist
-from lazy5.ui.qt_HDFLoad import Ui_Dialog
 
 class HDFLoad(_QDialog): ### EDIT ###
     """ GUI Loader Class for H5 Files """
