@@ -14,7 +14,7 @@ environment:
         PYTHON: "C:\\conda"
         MINICONDA_VERSION: "latest"
         PYTHON_ARCH: "64"
-        CONDA_DEPENDENCIES: "pyqt matplotlib pytest h5py"
+        CONDA_DEPENDENCIES: "pyqt pytest h5py"
         # PIP_DEPENDENCIES: "objgraph"
 
     matrix:
