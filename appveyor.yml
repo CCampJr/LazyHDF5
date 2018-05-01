@@ -14,7 +14,7 @@ environment:
         PYTHON: "C:\\conda"
         MINICONDA_VERSION: "latest"
         PYTHON_ARCH: "64"
-        CONDA_DEPENDENCIES: "pyqt5 pytest h5py codecov pytest-cov"
+        CONDA_DEPENDENCIES: "pyqt pytest h5py codecov pytest-cov"
         # PIP_DEPENDENCIES: "objgraph"
 
     matrix:
@@ -39,4 +39,4 @@ install:
 build: false
 
 test_script:
-    - "%CMD_IN_ENV% python -m pytest --cov='.'"
+    - "%CMD_IN_ENV% python -m pytest --cov='lazy5'"
