@@ -39,4 +39,4 @@ install:
 build: false
 
 test_script:
-    - "%CMD_IN_ENV% python -m pytest -v -s --cov='lazy5'"
+    - "%CMD_IN_ENV% python -m pytest -v -s"
