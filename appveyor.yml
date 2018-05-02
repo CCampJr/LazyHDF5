@@ -15,7 +15,7 @@ environment:
         MINICONDA_VERSION: "latest"
         PYTHON_ARCH: "64"
         CONDA_DEPENDENCIES: "pyqt h5py"
-        PIP_DEPENDENCIES: "pytest pytest-cov"
+        PIP_DEPENDENCIES: "pytest pytest-cov codecov"
 
     matrix:
         - PYTHON_VERSION: "3.6"
@@ -40,3 +40,7 @@ build: false
 
 test_script:
     - "%CMD_IN_ENV% python -m pytest -v -s --cov='lazy5'"
+
+after_test:
+    # Send coverage report to codecov
+    - codecov
