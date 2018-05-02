@@ -14,8 +14,8 @@ environment:
         PYTHON: "C:\\conda"
         MINICONDA_VERSION: "latest"
         PYTHON_ARCH: "64"
-        CONDA_DEPENDENCIES: "pyqt pytest h5py"
-        # PIP_DEPENDENCIES: "objgraph"
+        CONDA_DEPENDENCIES: "pyqt h5py"
+        PIP_DEPENDENCIES: "pytest pytest-cov"
 
     matrix:
         - PYTHON_VERSION: "3.6"
