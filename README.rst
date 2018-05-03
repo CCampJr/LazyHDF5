@@ -188,6 +188,22 @@ then left open.
     # From the command line 
     python .\lazy5\ui\QtHdfLoad.py
 
+5. PyQt5 HDF5 file viewer (programmatically)
+
+.. code:: python
+
+    import sys
+    from PyQt5.QtWidgets import QApplication
+    from lazy5.ui.QtHdfLoad import HdfLoad
+
+    app = QApplication(sys.argv)
+
+    result = HdfLoad.getFileDataSets(pth='.')
+    print('Result: {}'.format(result))
+
+    sys.exit()
+    
+
 NONLICENSE
 ----------
 This software was developed by employees of the National Institute of Standards 
