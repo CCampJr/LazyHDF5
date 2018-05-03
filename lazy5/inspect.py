@@ -6,6 +6,9 @@ import numpy as _np
 
 from lazy5.utils import (FidOrFile as _FidOrFile)
 
+__all__ = ['get_groups', 'get_datasets', 'get_hierarchy',
+           'get_attrs_dset']
+
 def get_groups(file):
     """
     Parameters
