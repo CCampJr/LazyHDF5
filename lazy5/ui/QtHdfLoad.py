@@ -28,13 +28,13 @@ except:
     has_PyQt5 = False
 else:
     has_PyQt5 = True
-    from lazy5.ui.qt_HDFLoad import Ui_Dialog
+    from lazy5.ui.qt_HdfLoad import Ui_Dialog
 # import numpy as _np
 
 from lazy5.inspect import get_hierarchy, get_attrs_dset
 from lazy5.nonh5utils import filterlist
 
-class HDFLoad(_QDialog): ### EDIT ###
+class HdfLoad(_QDialog): ### EDIT ###
     """ GUI Loader Class for H5 Files """
 
     # Default configuration
@@ -46,7 +46,7 @@ class HDFLoad(_QDialog): ### EDIT ###
     def __init__(self, parent=None):
 
         # Generic load/init designer-based GUI
-        super(HDFLoad, self).__init__(parent)
+        super(HdfLoad, self).__init__(parent)
         self.ui = Ui_Dialog()  # pylint: disable=C0103
         self.ui.setupUi(self)
 
@@ -80,7 +80,7 @@ class HDFLoad(_QDialog): ### EDIT ###
         """
 
         # pragma: no cover
-        dialog = HDFLoad(parent)
+        dialog = HdfLoad(parent)
         ret_fileopen = dialog.fileOpen(pth)
 
         ret = None
@@ -118,7 +118,7 @@ class HDFLoad(_QDialog): ### EDIT ###
     def populateGroups(self):  # Qt-related pylint: disable=C0103
         """ Populate dropdown box of group ui.comboBoxGroupSelect """
         self.group_dset_dict = get_hierarchy(_os.path.join(self.path, self.filename),
-                                             grp_w_dset=HDFLoad.config['only_show_grp_w_dset'])
+                                             grp_w_dset=HdfLoad.config['only_show_grp_w_dset'])
         # Load Group dropdown box
         self.ui.comboBoxGroupSelect.clear()
         for count in self.group_dset_dict:
@@ -143,9 +143,9 @@ class HDFLoad(_QDialog): ### EDIT ###
 
         if attr_dict:
             try:
-                self.ui.textDescription.setText(attr_dict[HDFLoad.config['attr_description']])
+                self.ui.textDescription.setText(attr_dict[HdfLoad.config['attr_description']])
             except (KeyError, AttributeError) as error_msg:
-                print('{}\nNo memo at key {}'.format(error_msg, HDFLoad.config['attr_description']))
+                print('{}\nNo memo at key {}'.format(error_msg, HdfLoad.config['attr_description']))
 
             for num, key in enumerate(attr_dict):
                 self.ui.tableAttributes.insertRow(self.ui.tableAttributes.rowCount())
@@ -192,19 +192,19 @@ class HDFLoad(_QDialog): ### EDIT ###
         if incl_list:  # Include list is not empty
             dset_list = filterlist(dset_list, incl_list,
                                    keep_filtered_items=True,
-                                   exclusive=HDFLoad.config['excl_filtering'])
+                                   exclusive=HdfLoad.config['excl_filtering'])
 
         if excl_list:  # Exclude list is not empty
             dset_list = filterlist(dset_list, excl_list,
                                    keep_filtered_items=False,
-                                   exclusive=HDFLoad.config['excl_filtering'])
+                                   exclusive=HdfLoad.config['excl_filtering'])
 
         self.ui.listDataSet.clear()
         self.ui.listDataSet.addItems(dset_list)
 
 if __name__ == '__main__':  # pragma: no cover
     app = _QApplication(_sys.argv)  # pylint: disable=C0103
-    result = HDFLoad.getFileDataSets(pth='../mP2_w_small.h5')  # pylint: disable=C0103
+    result = HdfLoad.getFileDataSets(pth='.')  # pylint: disable=C0103
     print('Result: {}'.format(result))
 
     _sys.exit()

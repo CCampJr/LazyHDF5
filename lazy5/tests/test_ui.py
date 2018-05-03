@@ -15,7 +15,7 @@ except:
     flag_has_pyQt5 = False
 else:
     flag_has_pyQt5 = True
-    from lazy5.ui.QtHdfLoad import HDFLoad
+    from lazy5.ui.QtHdfLoad import HdfLoad
 
 from lazy5.utils import hdf_is_open
 
@@ -63,7 +63,7 @@ class TestUI:
     def test_ui_load_file(self, hdf_dataset):
         """ Load test file and check groups """
         self.filename = hdf_dataset
-        dialog = HDFLoad()
+        dialog = HdfLoad()
         ret_fileopen = dialog.fileOpen(self.filename)
         
         list_dsets = [dialog.ui.listDataSet.item(num).text() for num in 
@@ -81,7 +81,7 @@ class TestUI:
     def test_ui_change_grp_and_filter_include(self, hdf_dataset):
         """ Load test file, change to Group1, filter for _1 """
         self.filename = hdf_dataset
-        dialog = HDFLoad()
+        dialog = HdfLoad()
         ret_fileopen = dialog.fileOpen(self.filename)
         
         # Change group to Group1
@@ -100,7 +100,7 @@ class TestUI:
     def test_ui_change_grp_and_filter_exclude(self, hdf_dataset):
         """ Load test file, change to Group1, filter for _1 """
         self.filename = hdf_dataset
-        dialog = HDFLoad()
+        dialog = HdfLoad()
         ret_fileopen = dialog.fileOpen(self.filename)
         
         # Change group to Group1
@@ -119,7 +119,7 @@ class TestUI:
     def test_ui_attrs(self, hdf_dataset):
         """ Load test file, change to base group (/), check attributes """
         self.filename = hdf_dataset
-        dialog = HDFLoad()
+        dialog = HdfLoad()
         ret_fileopen = dialog.fileOpen(self.filename)
         
         # Change group to Group1
@@ -139,7 +139,7 @@ class TestUI:
     def test_ui_wrongfile(self, hdf_dataset):
         """ Load test file, change to base group (/), check attributes """
         self.filename = hdf_dataset
-        dialog = HDFLoad()
+        dialog = HdfLoad()
         with pytest.raises(FileNotFoundError):
             ret_fileopen = dialog.fileOpen('does_not_exist.h5')
 
