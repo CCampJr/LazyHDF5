@@ -1,3 +1,0 @@
--   Add Usage to README.rst
--   Add an example
--   Push to Github
