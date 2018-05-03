@@ -27,7 +27,25 @@
 LazyHDF5: Python Macros for h5py... because I'm lazy
 ===============================================================
 
-LazyHDF5 is a small package for interacting with HDF5 files.
+LazyHDF5 is a small package for interacting with HDF5 files. The h5py
+library can do-it-all, but it's not necessarily easy to use and
+often requires many lines of code to do routine tasks. This package
+facilitates easier use.
+
+Also, an HDF5 file viewer written in PyQt5 (optional, not required
+for installation) that displaces groups, datasets, and attributes.
+
+- Inspection
+
+    - Get groups, datasets, file hierarchy, dataset attributes
+
+- Editing
+
+    - Write/alter/re-write attributes (coming soon)
+    - Repack datasets (coming soon)
+    - Copy datasets and files
+
+- Basic file viewer
 
 Dependencies
 ------------
@@ -109,18 +127,60 @@ Perform the install:
 
     python setup.py install
 
-Usage
------
+Usage Examples
+---------------
+
+1. Getting a list of groups from an un-opened HDF5 file
+
+**Note**: when a filename is provided, the file is opened, queried, and
+then closed.
 
 .. code:: python
 
-    Coming soon....
+    from lazy5.inspect import get_groups
 
-Examples
---------
+    filename = 'SomeFile.h5'
+    grp_list = get_groups(filename)
 
-Coming soon...
+    print('Groups:')
+    for grp in grp_list: 
+        print(grp)
 
+2. Getting list of datasets from an open HDF5 file
+
+**Note**: when a file-id is provided, the file is queried and
+then left open.
+
+.. code:: python
+
+    import h5py
+    from lazy5.inspect import get_datasets
+
+    filename = 'SomeFile.h5'
+    fid = h5py.File(filename, 'r')
+
+    dset_list = get_datasets(fid)
+
+    print('Datasets:')
+    for dset in dset_list: 
+        print(dset)
+
+    fid.close()
+
+3. Getting the file hierarchy
+
+.. code:: python
+
+    from lazy5.inspect import get_hierarchy
+
+    filename = 'SomeFile.h5'
+
+    hierarchy = get_hierarchy(filename)
+
+    print('Hierarchy:')
+    for k in hierarchy:
+        print('{} : {}'.format(k, hierarchy[k]))
+    
 
 NONLICENSE
 ----------
