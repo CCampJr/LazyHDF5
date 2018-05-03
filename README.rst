@@ -20,8 +20,8 @@
     :alt: PyPI
     :target: https://pypi.org/project/LazyHDF5/
 
-.. image:: https://img.shields.io/badge/License-NIST%20%2F%20Nonlicense-green.svg
-    :alt: License NIST / Nonlicense
+.. image:: https://img.shields.io/badge/License-NIST%20Public%20Domain-green.svg
+    :alt: NIST Public Domain
     :target: https://github.com/CCampJr/LazyHDF5/blob/dev/LICENSE.md
 
 LazyHDF5: Python Macros for h5py... because I'm lazy
