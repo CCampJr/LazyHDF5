@@ -181,6 +181,12 @@ then left open.
     for k in hierarchy:
         print('{} : {}'.format(k, hierarchy[k]))
     
+4. PyQt5 HDF5 file viewer
+
+.. code::
+
+    # From the command line 
+    python .\lazy5\ui\QtHdfLoad.py
 
 NONLICENSE
 ----------
