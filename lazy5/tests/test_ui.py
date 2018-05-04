@@ -10,7 +10,7 @@ try:
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtTest import QTest
     from PyQt5.QtCore import Qt
-except ImportError:
+except:
     FLAG_HAS_PYQT5 = False
 else:
     FLAG_HAS_PYQT5 = True
