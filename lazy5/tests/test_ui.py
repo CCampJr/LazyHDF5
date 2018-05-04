@@ -6,31 +6,20 @@ import h5py
 import numpy as np
 import pytest
 
-# try:
-#     from PyQt5.QtWidgets import QApplication
-#     from PyQt5.QtTest import QTest
-#     import PyQt5.QtCore
-#     from PyQt5.QtCore import Qt
-# except:
-#     flag_has_pyQt5 = False
-# else:
-#     flag_has_pyQt5 = True
-#     from lazy5.ui.QtHdfLoad import HdfLoad
-
-# from lazy5.utils import hdf_is_open
-
-# @pytest.mark.skipif(not flag_has_pyQt5, reason='PyQt5 not installed, skipping.')
-
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtTest import QTest
-import PyQt5.QtCore
-from PyQt5.QtCore import Qt
-
-# from lazy5.ui.QtHdfLoad import HdfLoad
-from lazy5.ui.QtHdfLoad import HdfLoad
+try:
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtTest import QTest
+    import PyQt5.QtCore
+    from PyQt5.QtCore import Qt
+except:
+    HAS_PYQT5 = False
+else:
+    HAS_PYQT5 = True
+    from lazy5.ui.QtHdfLoad import HdfLoad
 
 from lazy5.utils import hdf_is_open
 
+@pytest.mark.skipif(not HAS_PYQT5, reason='PyQt5 not installed, skipping.')
 class TestUI:
     """ Test the HDF5 PyQt5 Viewer  """
 

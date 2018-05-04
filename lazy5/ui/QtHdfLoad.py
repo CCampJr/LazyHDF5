@@ -19,17 +19,16 @@ HDF5 LOAD DATA QDialog (crikit.vis.subguis.h5loadgui)
 import sys as _sys
 import os as _os
 
-# try:
-# Generic imports for QT-based programs
-from PyQt5.QtWidgets import (QApplication as _QApplication, \
-QDialog as _QDialog, QFileDialog as _QFileDialog, \
-QTableWidgetItem as _QTableWidgetItem)
-# except:
-    # has_PyQt5 = False
-# else:
-    # has_PyQt5 = True
+try:
+    # Generic imports for QT-based programs
+    from PyQt5.QtWidgets import (QApplication as _QApplication, \
+    QDialog as _QDialog, QFileDialog as _QFileDialog, \
+    QTableWidgetItem as _QTableWidgetItem)
+except:
+    HAS_PYQT5 = False
+else:
+    HAS_PYQT5 = True
 from lazy5.ui.qt_HdfLoad import Ui_Dialog
-# import numpy as _np
 
 from lazy5.inspect import get_hierarchy, get_attrs_dset
 from lazy5.nonh5utils import filterlist
@@ -105,7 +104,7 @@ class HdfLoad(_QDialog): ### EDIT ###
             full_pth_fname = pth
         else:
             raise FileNotFoundError('Not a valid path. Not a valid file.')
-        
+
         ret = None
         if full_pth_fname:
             full_pth_fname = _os.path.abspath(full_pth_fname)  # Ensure correct /'s for each OS
@@ -154,7 +153,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
     def datasetSelected(self):  # Qt-related pylint: disable=C0103
         """ Action : One or more DataSets were selected from the list """
-        
+
         all_selected = self.ui.listDataSet.selectedItems()
         n_selected = len(all_selected)
 
