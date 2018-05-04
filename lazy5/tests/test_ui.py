@@ -14,6 +14,7 @@ except:
     FLAG_HAS_PYQT5 = False
 else:
     FLAG_HAS_PYQT5 = True
+    import lazy5.ui
     from lazy5.ui.QtHdfLoad import HdfLoad
 
 from lazy5.utils import hdf_is_open
