@@ -9,19 +9,21 @@ import pytest
 try:
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtTest import QTest
-    import PyQt5.QtCore
     from PyQt5.QtCore import Qt
-except:
-    flag_has_pyQt5 = False
+except (ModuleNotFoundError, ImportError):
+    FLAG_HAS_PYQT5 = False
 else:
-    flag_has_pyQt5 = True
+    FLAG_HAS_PYQT5 = True
     from lazy5.ui.QtHdfLoad import HdfLoad
 
 from lazy5.utils import hdf_is_open
 
-@pytest.mark.skipif(not flag_has_pyQt5, reason='PyQt5 not installed, skipping.')
+@pytest.mark.skipif(not FLAG_HAS_PYQT5, reason='PyQt5 not installed, skipping.')
 class TestUI:
-    """     """
+    """ Test the HDF5 PyQt5 Viewer  """
+    def __init__(self):
+        self.filename = None
+
     @pytest.fixture(scope="module")
     def hdf_dataset(self):
         """ Setups and tears down a sample HDF5 file """
@@ -51,7 +53,7 @@ class TestUI:
         fid['base'].attrs.create('Attribute_np_1d', np.array([1, 2, 3]))
         fid['base'].attrs.create('Attribute_np_2d', np.array([[1, 2, 3], [4, 5, 6]]))
 
-        app = QApplication(sys.argv)  # pylint: disable=C0103
+        app = QApplication(sys.argv)  # pylint: disable=C0103, W0612
         yield filename
 
         # Tear-down
@@ -64,14 +66,14 @@ class TestUI:
         """ Load test file and check groups """
         self.filename = hdf_dataset
         dialog = HdfLoad()
-        ret_fileopen = dialog.fileOpen(self.filename)
-        
-        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in 
+        _ = dialog.fileOpen(self.filename)
+
+        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
                       range(dialog.ui.listDataSet.count())]
 
-        list_grps = [dialog.ui.comboBoxGroupSelect.itemText(num) for num in 
-                      range(dialog.ui.comboBoxGroupSelect.count())]
-        
+        list_grps = [dialog.ui.comboBoxGroupSelect.itemText(num) for num in
+                     range(dialog.ui.comboBoxGroupSelect.count())]
+
         assert list_dsets == ['base']
         assert 'Group1' in list_grps
         assert 'Group2/Group3' in list_grps
@@ -82,50 +84,50 @@ class TestUI:
         """ Load test file, change to Group1, filter for _1 """
         self.filename = hdf_dataset
         dialog = HdfLoad()
-        ret_fileopen = dialog.fileOpen(self.filename)
-        
+        _ = dialog.fileOpen(self.filename)
+
         # Change group to Group1
         dialog.ui.comboBoxGroupSelect.setCurrentIndex(1)
-        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in 
-                    range(dialog.ui.listDataSet.count())]
+        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
+                      range(dialog.ui.listDataSet.count())]
         assert dialog.ui.comboBoxGroupSelect.currentText() == 'Group1'
-        assert list_dsets == ['ingroup1_1','ingroup1_2']
+        assert list_dsets == ['ingroup1_1', 'ingroup1_2']
 
         dialog.ui.filterIncludeString.setText('_1')
         QTest.mouseClick(dialog.ui.pushButtonFilter, Qt.LeftButton)
-        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in 
-                    range(dialog.ui.listDataSet.count())]
+        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
+                      range(dialog.ui.listDataSet.count())]
         assert list_dsets == ['ingroup1_1']
 
     def test_ui_change_grp_and_filter_exclude(self, hdf_dataset):
         """ Load test file, change to Group1, filter for _1 """
         self.filename = hdf_dataset
         dialog = HdfLoad()
-        ret_fileopen = dialog.fileOpen(self.filename)
-        
+        _ = dialog.fileOpen(self.filename)
+
         # Change group to Group1
         dialog.ui.comboBoxGroupSelect.setCurrentIndex(1)
-        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in 
-                    range(dialog.ui.listDataSet.count())]
+        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
+                      range(dialog.ui.listDataSet.count())]
         assert dialog.ui.comboBoxGroupSelect.currentText() == 'Group1'
-        assert list_dsets == ['ingroup1_1','ingroup1_2']
+        assert list_dsets == ['ingroup1_1', 'ingroup1_2']
 
         dialog.ui.filterExcludeString.setText('_1')
         QTest.mouseClick(dialog.ui.pushButtonFilter, Qt.LeftButton)
-        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in 
-                    range(dialog.ui.listDataSet.count())]
+        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
+                      range(dialog.ui.listDataSet.count())]
         assert list_dsets == ['ingroup1_2']
 
     def test_ui_attrs(self, hdf_dataset):
         """ Load test file, change to base group (/), check attributes """
         self.filename = hdf_dataset
         dialog = HdfLoad()
-        ret_fileopen = dialog.fileOpen(self.filename)
-        
+        _ = dialog.fileOpen(self.filename)
+
         # Change group to Group1
         dialog.ui.comboBoxGroupSelect.setCurrentIndex(0)
-        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in 
-                    range(dialog.ui.listDataSet.count())]
+        list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
+                      range(dialog.ui.listDataSet.count())]
         assert dialog.ui.comboBoxGroupSelect.currentText() == '/'
         assert list_dsets == ['base']
 
@@ -133,7 +135,8 @@ class TestUI:
         dialog.ui.listDataSet.item(0).setSelected(True)
         QTest.mouseClick(dialog.ui.listDataSet.viewport(), Qt.LeftButton)
 
-        assert 'Attribute_str' == dialog.ui.tableAttributes.findItems('Attribute_str', Qt.MatchExactly)[0].text()
+        assert (dialog.ui.tableAttributes.findItems('Attribute_str', Qt.MatchExactly)[0].text() ==
+                'Attribute_str')
         assert not dialog.ui.tableAttributes.findItems('fake', Qt.MatchExactly)  # Empty
 
     def test_ui_wrongfile(self, hdf_dataset):
@@ -141,14 +144,4 @@ class TestUI:
         self.filename = hdf_dataset
         dialog = HdfLoad()
         with pytest.raises(FileNotFoundError):
-            ret_fileopen = dialog.fileOpen('does_not_exist.h5')
-
-
-
-        # list_grps = dialog.ui.comboBoxGroupSelect.ite
-        # QTest.mouseClick(dialog.ui.pushButtonCancel, Qt.LeftButton)
-        # ret_fileopen = dialog.fileOpen(self.filename)
-
-
-
-        
+            _ = dialog.fileOpen('does_not_exist.h5')
