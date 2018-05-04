@@ -48,6 +48,7 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+nodeids
 
 # Translations
 *.mo
@@ -102,3 +103,5 @@ ENV/
 
 # mypy
 .mypy_cache/
+.pytest_cache/v/cache/nodeids
+.pytest_cache/v/cache/nodeids
