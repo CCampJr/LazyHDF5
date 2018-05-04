@@ -186,7 +186,7 @@ then left open.
 .. code::
 
     # From the command line 
-    python .\lazy5\ui\QtHdfLoad.py
+    python ./lazy5/ui/QtHdfLoad.py
 
 5. PyQt5 HDF5 file viewer (programmatically)
 
