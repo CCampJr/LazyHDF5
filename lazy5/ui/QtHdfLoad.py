@@ -34,7 +34,7 @@ else:
 from lazy5.inspect import get_hierarchy, get_attrs_dset
 from lazy5.nonh5utils import filterlist
 
-class HdfLoad(_QDialog): ### EDIT ###
+class HDFLoad(_QDialog): ### EDIT ###
     """ GUI Loader Class for H5 Files """
 
     # Default configuration
@@ -204,7 +204,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
 if __name__ == '__main__':  # pragma: no cover
     app = _QApplication(_sys.argv)  # pylint: disable=C0103
-    result = HdfLoad.getFileDataSets(pth='.')  # pylint: disable=C0103
+    result = HDFLoad.getFileDataSets(pth='.')  # pylint: disable=C0103
     print('Result: {}'.format(result))
 
     _sys.exit()
