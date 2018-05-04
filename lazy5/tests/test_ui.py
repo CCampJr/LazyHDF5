@@ -21,8 +21,6 @@ from lazy5.utils import hdf_is_open
 @pytest.mark.skipif(not FLAG_HAS_PYQT5, reason='PyQt5 not installed, skipping.')
 class TestUI:
     """ Test the HDF5 PyQt5 Viewer  """
-    def __init__(self):
-        self.filename = None
 
     @pytest.fixture(scope="module")
     def hdf_dataset(self):
