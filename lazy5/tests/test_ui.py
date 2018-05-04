@@ -15,7 +15,6 @@ except:
     flag_has_pyQt5 = False
 else:
     flag_has_pyQt5 = True
-    import lazy5.ui
     from lazy5.ui.QtHdfLoad import HdfLoad
 
 from lazy5.utils import hdf_is_open
