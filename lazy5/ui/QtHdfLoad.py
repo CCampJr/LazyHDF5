@@ -19,22 +19,22 @@ HDF5 LOAD DATA QDialog (crikit.vis.subguis.h5loadgui)
 import sys as _sys
 import os as _os
 
-try:
-    # Generic imports for QT-based programs
-    from PyQt5.QtWidgets import (QApplication as _QApplication, \
-    QDialog as _QDialog, QFileDialog as _QFileDialog, \
-    QTableWidgetItem as _QTableWidgetItem)
-except:
-    has_PyQt5 = False
-else:
-    has_PyQt5 = True
-    from lazy5.ui.qt_HDFLoad import Ui_Dialog
+# try:
+# Generic imports for QT-based programs
+from PyQt5.QtWidgets import (QApplication as _QApplication, \
+QDialog as _QDialog, QFileDialog as _QFileDialog, \
+QTableWidgetItem as _QTableWidgetItem)
+# except:
+    # has_PyQt5 = False
+# else:
+    # has_PyQt5 = True
+from lazy5.ui.qt_HdfLoad import Ui_Dialog
 # import numpy as _np
 
 from lazy5.inspect import get_hierarchy, get_attrs_dset
 from lazy5.nonh5utils import filterlist
 
-class HDFLoad(_QDialog): ### EDIT ###
+class HdfLoad(_QDialog): ### EDIT ###
     """ GUI Loader Class for H5 Files """
 
     # Default configuration
@@ -46,7 +46,7 @@ class HDFLoad(_QDialog): ### EDIT ###
     def __init__(self, parent=None):
 
         # Generic load/init designer-based GUI
-        super(HDFLoad, self).__init__(parent)
+        super(HdfLoad, self).__init__(parent)
         self.ui = Ui_Dialog()  # pylint: disable=C0103
         self.ui.setupUi(self)
 
@@ -204,7 +204,7 @@ class HDFLoad(_QDialog): ### EDIT ###
 
 if __name__ == '__main__':  # pragma: no cover
     app = _QApplication(_sys.argv)  # pylint: disable=C0103
-    result = HDFLoad.getFileDataSets(pth='.')  # pylint: disable=C0103
+    result = HdfLoad.getFileDataSets(pth='.')  # pylint: disable=C0103
     print('Result: {}'.format(result))
 
     _sys.exit()
