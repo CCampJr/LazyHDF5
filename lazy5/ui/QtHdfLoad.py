@@ -28,7 +28,7 @@ except:
     has_PyQt5 = False
 else:
     has_PyQt5 = True
-    from lazy5.ui.qt_HdfLoad import Ui_Dialog
+    from lazy5.ui.qt_HDFLoad import Ui_Dialog
 # import numpy as _np
 
 from lazy5.inspect import get_hierarchy, get_attrs_dset
@@ -46,7 +46,7 @@ class HDFLoad(_QDialog): ### EDIT ###
     def __init__(self, parent=None):
 
         # Generic load/init designer-based GUI
-        super(HdfLoad, self).__init__(parent)
+        super(HDFLoad, self).__init__(parent)
         self.ui = Ui_Dialog()  # pylint: disable=C0103
         self.ui.setupUi(self)
 
