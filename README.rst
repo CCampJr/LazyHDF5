@@ -35,11 +35,11 @@ facilitates easier use.
 Also, an HDF5 file viewer written in PyQt5 (optional, not required
 for installation) that displaces groups, datasets, and attributes.
 
-- Inspection
+-   Inspection
 
     - Get groups, datasets, file hierarchy, dataset attributes
 
-- Editing
+-   Editing
 
     - Write/alter/re-write attributes (coming soon)
     - Repack datasets (coming soon)
