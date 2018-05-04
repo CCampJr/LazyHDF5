@@ -25,11 +25,10 @@ try:
     QDialog as _QDialog, QFileDialog as _QFileDialog, \
     QTableWidgetItem as _QTableWidgetItem)
 except:
-    has_PyQt5 = False
+    HAS_PYQT5 = False
 else:
-    has_PyQt5 = True
-    from lazy5.ui.qt_HdfLoad import Ui_Dialog
-# import numpy as _np
+    HAS_PYQT5 = True
+from lazy5.ui.qt_HdfLoad import Ui_Dialog
 
 from lazy5.inspect import get_hierarchy, get_attrs_dset
 from lazy5.nonh5utils import filterlist
@@ -105,7 +104,7 @@ class HdfLoad(_QDialog): ### EDIT ###
             full_pth_fname = pth
         else:
             raise FileNotFoundError('Not a valid path. Not a valid file.')
-        
+
         ret = None
         if full_pth_fname:
             full_pth_fname = _os.path.abspath(full_pth_fname)  # Ensure correct /'s for each OS
@@ -154,7 +153,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
     def datasetSelected(self):  # Qt-related pylint: disable=C0103
         """ Action : One or more DataSets were selected from the list """
-        
+
         all_selected = self.ui.listDataSet.selectedItems()
         n_selected = len(all_selected)
 

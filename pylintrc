@@ -1,2 +1,2 @@
-[MASTER]
-ignore-patterns= qt_*
+# [MASTER]
+# ignore-patterns= qt_*

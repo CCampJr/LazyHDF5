@@ -9,16 +9,17 @@ import pytest
 try:
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtTest import QTest
+    import PyQt5.QtCore
     from PyQt5.QtCore import Qt
 except:
-    FLAG_HAS_PYQT5 = False
+    HAS_PYQT5 = False
 else:
-    FLAG_HAS_PYQT5 = True
+    HAS_PYQT5 = True
     from lazy5.ui.QtHdfLoad import HdfLoad
 
 from lazy5.utils import hdf_is_open
 
-@pytest.mark.skipif(not FLAG_HAS_PYQT5, reason='PyQt5 not installed, skipping.')
+@pytest.mark.skipif(not HAS_PYQT5, reason='PyQt5 not installed, skipping.')
 class TestUI:
     """ Test the HDF5 PyQt5 Viewer  """
 

@@ -1,14 +1,14 @@
 .. -*- mode: rst -*-
 
-.. image:: https://img.shields.io/travis/CCampJr/LazyHDF5/dev.svg
+.. image:: https://img.shields.io/travis/CCampJr/LazyHDF5/master.svg
     :alt: Travis branch
     :target: https://travis-ci.org/CCampJr/LazyHDF5
 
-.. image:: https://img.shields.io/appveyor/ci/CCampJr/LazyHDF5/dev.svg
+.. image:: https://img.shields.io/appveyor/ci/CCampJr/LazyHDF5/master.svg
     :alt: AppVeyor branch
     :target: https://ci.appveyor.com/project/CCampJr/LazyHDF5
 
-.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/dev.svg
+.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/master.svg
     :alt: Codecov branch
     :target: https://codecov.io/gh/CCampJr/LazyHDF5
 
@@ -22,7 +22,7 @@
 
 .. image:: https://img.shields.io/badge/License-NIST%20Public%20Domain-green.svg
     :alt: NIST Public Domain
-    :target: https://github.com/CCampJr/LazyHDF5/blob/dev/LICENSE.md
+    :target: https://github.com/CCampJr/LazyHDF5/blob/master/LICENSE.md
 
 LazyHDF5: Python Macros for h5py... because I'm lazy
 ===============================================================
@@ -35,11 +35,11 @@ facilitates easier use.
 Also, an HDF5 file viewer written in PyQt5 (optional, not required
 for installation) that displaces groups, datasets, and attributes.
 
-- Inspection
+-   Inspection
 
     - Get groups, datasets, file hierarchy, dataset attributes
 
-- Editing
+-   Editing
 
     - Write/alter/re-write attributes (coming soon)
     - Repack datasets (coming soon)
@@ -186,7 +186,7 @@ then left open.
 .. code::
 
     # From the command line 
-    python .\lazy5\ui\QtHdfLoad.py
+    python ./lazy5/ui/QtHdfLoad.py
 
 5. PyQt5 HDF5 file viewer (programmatically)
 
