@@ -4,7 +4,7 @@ import h5py as _h5py
 from lazy5.utils import (FidOrFile as _FidOrFile,
                          check_type_compat as _check_type_compat)
 
-def alter_attr(dset, attr_key, attr_val, file=None, verbose=True,
+def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
                check_same_type=False, must_exist=False):
     """
     Alter attribute dset['attr_key] with attr_val.
@@ -46,6 +46,8 @@ def alter_attr(dset, attr_key, attr_val, file=None, verbose=True,
         if isinstance(dset, str):
             dset_object = fid[dset]
         elif isinstance(dset, _h5py.Dataset):
+            if isinstance(file, str):
+                raise TypeError('Cannot provide h5py.Dataset dset and a filename str.')
             dset_object = dset
         else:
             raise TypeError('dset unknown')
@@ -68,14 +70,14 @@ def alter_attr(dset, attr_key, attr_val, file=None, verbose=True,
             err_str3 = '({})'.format(type(dset_object.attrs[attr_key]))
             raise TypeError(err_str1 + err_str2 + err_str3)
 
-    dset_object.attrs[attr_key] = attr_val
-
     if verbose:
         if dset_object.attrs.get(attr_key) is None:
             print('Attribute {} does not exist. Creating.'.format(attr_key))
         else:
             print('Dataset[{}] = {} -> {}'.format(attr_key, dset_object.attrs[attr_key],
                                                   attr_val))
+
+    dset_object.attrs[attr_key] = attr_val
 
     if fof is not None:
         fof.close_if_file_not_fid()
