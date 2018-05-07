@@ -80,7 +80,7 @@ def test_attr_alter_same(hdf_dataset):
 
     orig_key = 'Attribute_np_bytes'
     orig_val = attr_obj[orig_key]
-    new_val = np.bytes_('Test2')
+    new_val = np.bytes_('Test2')  # pylint: disable=E1101
     alter_attr_same(dset_obj, orig_key, new_val)
     assert orig_val != attr_obj[orig_key]
     assert attr_obj[orig_key] == new_val
@@ -158,18 +158,35 @@ def test_attr_alter_same(hdf_dataset):
 def test_attr_alter(hdf_dataset):
     """ Try altering an attribute with the same or different type of value"""
 
-    _, fid = hdf_dataset
+    filename, fid = hdf_dataset
     dset_obj = fid['base']
     attr_obj = dset_obj.attrs
 
-    # Try new attrbute
+    # Try new attrbute (dset_obj)
     orig_key = 'Attribute_new'
     new_val = 'Test2'
     assert attr_obj.get(orig_key) is None
     alter_attr(dset_obj, orig_key, new_val)
     assert attr_obj[orig_key] == new_val
 
+    # Try new attrbute (dset_obj)
     orig_key = 'Attribute_new2'
+    new_val = 'Test2'
+    assert attr_obj.get(orig_key) is None
+    with pytest.raises(TypeError):
+        alter_attr([], orig_key, new_val, file=fid)
+    alter_attr(dset_obj, orig_key, new_val, file=fid)
+    assert attr_obj[orig_key] == new_val
+
+    # Try new attrbute (given filename)
+    orig_key = 'Attribute_new3'
+    new_val = 'Test3'
+    with pytest.raises(TypeError):
+        alter_attr(dset_obj, orig_key, new_val, file=filename)
+    alter_attr('base', orig_key, new_val, file=filename)
+    assert attr_obj[orig_key] == new_val
+
+    orig_key = 'Attribute_new4'
     new_val = 'Test2'
     with pytest.raises(KeyError):
         alter_attr(dset_obj, orig_key, new_val, must_exist=True)
@@ -191,7 +208,7 @@ def test_attr_alter(hdf_dataset):
 
     orig_key = 'Attribute_np_bytes'
     orig_val = attr_obj[orig_key]
-    new_val = np.bytes_('Test2')
+    new_val = np.bytes_('Test2')  # pylint: disable=E1101
     alter_attr(dset_obj, orig_key, new_val)
     assert orig_val != attr_obj[orig_key]
     assert attr_obj[orig_key] == new_val
@@ -271,3 +288,9 @@ def test_attr_alter(hdf_dataset):
     alter_attr(dset_obj, orig_key, new_val)
     assert not np.allclose(orig_val, attr_obj[orig_key])
     assert np.allclose(attr_obj[orig_key], new_val)
+
+    # Try providing dset as str but no file
+    orig_key = 'Attribute_int'
+    new_val = 3
+    with pytest.raises(TypeError):
+        alter_attr('base', orig_key, new_val)
