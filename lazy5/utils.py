@@ -1,5 +1,6 @@
 """ Utility functions """
 import h5py as _h5py
+import numpy as _np
 
 __all__ = ['FidOrFile', 'hdf_is_open']
 
@@ -73,3 +74,41 @@ def hdf_is_open(fid):
         return True
     else:
         return None
+
+def check_type_compat(input_a, input_b):
+    """
+    Check the compatibility of types. E.g. np.float32 IS compatible with
+    float
+    """
+    return return_family_type(input_a) is return_family_type(input_b)
+
+
+def return_family_type(input_a):
+    """ Return family of type input_a. int, float, complex, str, bytes, bool """
+    a_type = None
+
+    # Have to do numpy first, bc np.str_ is subtype of str also
+    if isinstance(input_a, _np.generic):  # Is input_a numpy-type
+        if isinstance(input_a, _np.bool_):
+            a_type = bool
+        elif isinstance(input_a, _np.bytes_):  # pylint: disable=E1101
+            a_type = bytes
+        elif isinstance(input_a, _np.str_):  # pylint: disable=E1101
+            a_type = str
+        elif isinstance(input_a, _np.integer):
+            a_type = int
+        elif isinstance(input_a, _np.floating):  # pylint: disable=E1101
+            a_type = float
+        elif isinstance(input_a, _np.complexfloating):  # pylint: disable=E1101
+            a_type = complex
+    elif isinstance(input_a, _np.ndarray):
+        # Cute trick: Send 1 as type from the dtype for testing
+        a_type = return_family_type(input_a.dtype.type(1))
+    elif isinstance(input_a, (int, float, complex, str, bytes, bool)):
+        a_type = type(input_a)
+
+    if a_type is None:
+        err_str1 = 'input_a is not int, float, str, or bool; '
+        raise TypeError(err_str1 + 'or a numpy-equivalent: {}'.format(type(input_a)))
+
+    return a_type
