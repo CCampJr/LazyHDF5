@@ -96,6 +96,9 @@ class HdfLoad(_QDialog): ### EDIT ###
     def fileOpen(self, pth='./'):  # Qt-related pylint: disable=C0103
         """ Select HDF5 File via QDialog built-in."""
 
+        if pth is None:
+            pth = './'
+            
         if _os.path.isdir(pth):  # No file provided, use QFileDialog; # pragma: no cover
             filetype_options = 'HDF5 Files (*.h5 *.hdf);;All Files (*.*)'
             full_pth_fname, _ = _QFileDialog.getOpenFileName(self, 'Open H5 File', pth,
