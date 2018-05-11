@@ -7,7 +7,8 @@ import pytest
 import numpy as np
 
 from lazy5.inspect import (get_groups, get_datasets, get_hierarchy,
-                           get_attrs_dset)
+                           get_attrs_dset, valid_dsets, valid_file)
+
 from lazy5.utils import hdf_is_open
 
 @pytest.fixture(scope="module")
@@ -45,6 +46,58 @@ def hdf_dataset():
     if hdf_is_open(fid):
         fid.close()
     os.remove(filename)
+
+def test_valid_file(hdf_dataset):  # pylint:disable=redefined-outer-name
+    """ Test whether a file is valid or not """
+    
+    filename, fid = hdf_dataset
+
+    assert valid_file(filename, verbose=True)
+    assert not valid_file('NOT_A_REAL_FILE.XYZ', verbose=True)
+
+def test_valid_dsets(hdf_dataset):  # pylint:disable=redefined-outer-name
+    """ Test whether a dset or list of dsets are valid or not """
+    
+    filename, fid = hdf_dataset
+
+    # NOT valid filename
+    assert not valid_dsets('NOTAFILE.XYZ', 'base', verbose=True)
+
+    # Single dataset
+    dset_list = 'base'
+    assert valid_dsets(filename, dset_list, verbose=True)
+
+    # Single dataset by fid
+    dset_list = 'base'
+    assert valid_dsets(fid, dset_list, verbose=True)
+
+    # Single dataset is WRONG
+    dset_list = 'NOTADSET'
+    assert not valid_dsets(filename, dset_list, verbose=True)
+
+    # Single dataset in list
+    dset_list = ['base']
+    assert valid_dsets(filename, dset_list, verbose=True)
+
+    # Datasets in list -- NOTE some have leading slashes, some don't
+    dset_list = ['base', '/Group1/ingroup1_1', '/Group1/ingroup1_2',
+                 'Group2/ingroup2']
+    assert valid_dsets(filename, dset_list, verbose=True)
+
+    # Datasets in list -- 1 IS WRONG
+    dset_list = ['base', '/Group1/ingroup1_1', '/Group1/ingroup1_2',
+                 'Group2/DOESNOTEXIST']
+    assert not valid_dsets(filename, dset_list, verbose=True)
+
+    # Dataset with wrong-type
+    dset_list = 1
+    with pytest.raises(TypeError):
+        valid_dsets(filename, dset_list, verbose=True)
+
+    # Dataset with wrong-type
+    dset_list = ['base', 1]
+    with pytest.raises(TypeError):
+        valid_dsets(filename, dset_list, verbose=True)
 
 def test_get_groups(hdf_dataset):  # pylint:disable=redefined-outer-name
     """ Get an HDF5 file's group list """
