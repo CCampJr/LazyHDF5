@@ -1,13 +1,15 @@
 """ Test inspection of HDF5 files """
 import os
 
+from collections import OrderedDict as _OrderedDict
+
 import h5py
 import pytest
 
 import numpy as np
 
 from lazy5.utils import hdf_is_open
-from lazy5.alter import alter_attr_same, alter_attr
+from lazy5.alter import alter_attr_same, alter_attr, write_attr_dict
 
 @pytest.fixture(scope="function")
 def hdf_dataset():
@@ -294,3 +296,42 @@ def test_attr_alter(hdf_dataset):
     new_val = 3
     with pytest.raises(TypeError):
         alter_attr('base', orig_key, new_val)
+
+def test_write_attr_dict(hdf_dataset):
+    """ Try writing dictionary of attributes """
+
+    filename, fid = hdf_dataset
+    dset_obj = fid['base']
+    
+    attr_dict = _OrderedDict([['WDA2', 2], ['WDA1', 1]])
+    
+    # Write via dset obj
+    assert write_attr_dict(dset_obj, attr_dict, fid=None, sort_attrs=False, verbose=False)
+    assert dset_obj.attrs['WDA2'] == 2
+    assert dset_obj.attrs['WDA1'] == 1
+    assert dset_obj.attrs['Attribute_str'] == 'Test'
+    l_attr = list(dset_obj.attrs.keys())
+
+    # Order should be that written
+    l_attr[-2] == 'WDA2'
+    l_attr[-1] == 'WDA1'
+
+    # Write via dset str MISSING fid
+    with pytest.raises(TypeError):
+        write_attr_dict('base', attr_dict, fid=None, sort_attrs=False, verbose=False)
+
+    # Write via dset str
+    assert write_attr_dict('base', attr_dict, fid=fid, sort_attrs=False, verbose=False)
+    assert dset_obj.attrs['WDA2'] == 2
+    assert dset_obj.attrs['WDA1'] == 1
+    assert dset_obj.attrs['Attribute_str'] == 'Test'
+
+    # Write via dset str and SORT attr
+    assert write_attr_dict('base', attr_dict, fid=fid, sort_attrs=True, verbose=False)
+    assert dset_obj.attrs['WDA2'] == 2
+    assert dset_obj.attrs['WDA1'] == 1
+
+    # Order should be sorted. WDA* are the last alphanumerically in this test file
+    l_attr = list(dset_obj.attrs.keys())
+    l_attr[-1] == 'WDA2'
+    l_attr[-2] == 'WDA1'

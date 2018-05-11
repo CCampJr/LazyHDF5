@@ -1,16 +1,16 @@
 """ Macros for inspection of HDF5 files """
 import h5py as _h5py
 
-from lazy5.utils import (FidOrFile as _FidOrFile,
-                         check_type_compat as _check_type_compat)
+from .utils import (FidOrFile as _FidOrFile)
+from .nonh5utils import (check_type_compat as _check_type_compat)
 
-from lazy5.config import DefaultConfig
+from .config import DefaultConfig
 _h5py.get_config().complex_names = DefaultConfig().complex_names
 
 def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
                check_same_type=False, must_exist=False):
     """
-    Alter attribute dset['attr_key] with attr_val.
+    Alter attribute dset['attr_key'] with attr_val.
 
     Parameters
     ----------
@@ -32,7 +32,7 @@ def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
 
     check_same_type : bool
         Check that the inputs are compatible types as defined in
-        lazy5.utils.check_type_compat or lazy5.utils.return_family_type
+        lazy5.nonh5utils.check_type_compat or lazy5.utils.return_family_type
 
     must_exist : bool
         The attribute must already exist.
@@ -116,3 +116,37 @@ def alter_attr_same(dset, attr_key, attr_val, file=None, verbose=True,
     """
     return alter_attr(dset, attr_key, attr_val, file, verbose,
                       check_same_type=True, must_exist=must_exist)
+
+def write_attr_dict(dset, attr_dict, fid=None, sort_attrs=False, verbose=False):
+    """
+    Write entire dictionary of attrbutes to dataset.
+
+    Parameters
+    ----------
+    dset : str or h5py.Dataset
+        String to or Dataset-object for dataset in HDF5 file. If string,
+        fid must be provided.
+
+    attr_dict : dict
+        Attribute dictionary
+
+    fid : h5py.File
+        If dset is a string, file-object for open HDF5 file must be provided.
+
+    sort_attrs : bool
+        Sort attribute keys alphabetically prior to writing
+
+    verbose : bool
+        Verbose output to stdout
+    """
+
+    attr_key_list = list(attr_dict)
+    if sort_attrs:
+        attr_key_list.sort()
+
+    for attr_key in attr_key_list:
+        attr_val = attr_dict[attr_key]
+        alter_attr(dset, attr_key, attr_val, file=fid, verbose=verbose,
+                   check_same_type=False, must_exist=False)
+
+    return True
