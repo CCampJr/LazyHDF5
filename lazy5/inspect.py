@@ -1,16 +1,17 @@
 """ Macros for inspection of HDF5 files """
+import os as _os
 from collections import OrderedDict as _OrderedDict
 
 import h5py as _h5py
 import numpy as _np
 
-from lazy5.utils import (FidOrFile as _FidOrFile)
+from .utils import (FidOrFile as _FidOrFile, hdf_is_open as _hdf_is_open)
 
-from lazy5.config import DefaultConfig
+from .config import DefaultConfig
 _h5py.get_config().complex_names = DefaultConfig().complex_names
 
 __all__ = ['get_groups', 'get_datasets', 'get_hierarchy',
-           'get_attrs_dset']
+           'get_attrs_dset', 'valid_dsets', 'valid_file']
 
 def get_groups(file):
     """
@@ -184,3 +185,76 @@ def get_attrs_dset(file, dset, convert_to_str=True):
     fof.close_if_file_not_fid()
 
     return attr_dict
+
+def valid_file(filename, pth=None, verbose=False):
+    """ Validate whether a file exists (or if a fid, is-open """
+
+    if isinstance(filename, _h5py.File):  # fid
+        isvalid = _hdf_is_open(filename)
+
+    elif isinstance(filename, str):
+
+        if not pth:
+            pth = './'
+        fname_long = _os.path.join(pth, filename)
+
+        isvalid = _os.path.isfile(fname_long)
+
+        if verbose:
+            if isvalid:
+                print('{} is a valid file.'.format(fname_long))
+            else:
+                print('{} is a not valid file.'.format(fname_long))
+
+    return isvalid
+
+def valid_dsets(filename, dset_list, pth=None, verbose=False):
+    """ Check whether 1 or more datasets are valid """
+
+    def _rem_leading_slash(str_to_check):
+        """ Return string sans leading '/' if there is one """
+        if str_to_check[0] == '/':
+            return str_to_check[1:]
+        else:
+            return str_to_check
+
+    file_is_valid = valid_file(filename, pth=pth, verbose=verbose)
+
+    if not file_is_valid:
+        return False
+
+    dset_in_file = get_datasets(filename, fulldsetpath=True)
+
+    if isinstance(dset_list, (list, tuple)):
+        hits = 0
+        for dset in dset_list:
+            dset_to_test = _rem_leading_slash(dset)
+            if dset_in_file.count(dset_to_test) > 0:
+                hits += 1
+                if verbose:
+                    print('{} : VALID'.format(dset_to_test))
+            else:
+                if verbose:
+                    print('{} : NOT VALID'.format(dset_to_test))
+        if hits == len(dset_list):
+            if verbose:
+                print('All datasets are valid')
+            return True
+        else:
+            if verbose:
+                print('Some or all datasets are NOT valid')
+            return False
+    elif isinstance(dset_list, str):
+        if dset_in_file.count(_rem_leading_slash(dset_list)) > 0:
+            if verbose:
+                print('{} : VALID'.format(dset_list))
+            return True
+        else:
+            if verbose:
+                print('{} : NOT VALID'.format(dset_list))
+            return False
+    else:
+        err_str1 = 'dset_list: {} of type {} '.format(dset_list, type(dset_list))
+        err_str2 = 'is not a str, list, or tuple'
+        raise TypeError(err_str1 + err_str2)
+
