@@ -58,7 +58,7 @@ def save(filename, dset, data, pth=None, attr_dict=None, mode='a',
     fid = fof.fid
 
     if not dset_overwrite:
-        if _valid_dsets(fid, dset, pth=pth, verbose=verbose):
+        if _valid_dsets(fid, dset, pth=pth, verbose=False):
             err_str1 = 'Dataset {} exists. '.format(dset)
             err_str2 = 'Param dset_overwrite=False. Will not overwrite'
             raise IOError(err_str1 + err_str2)
