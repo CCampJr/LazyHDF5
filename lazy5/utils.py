@@ -2,6 +2,9 @@
 import h5py as _h5py
 import numpy as _np
 
+from lazy5.config import DefaultConfig
+_h5py.get_config().complex_names = DefaultConfig().complex_names
+
 __all__ = ['FidOrFile', 'hdf_is_open']
 
 class FidOrFile:

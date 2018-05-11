@@ -4,6 +4,9 @@ import h5py as _h5py
 from lazy5.utils import (FidOrFile as _FidOrFile,
                          check_type_compat as _check_type_compat)
 
+from lazy5.config import DefaultConfig
+_h5py.get_config().complex_names = DefaultConfig().complex_names
+
 def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
                check_same_type=False, must_exist=False):
     """

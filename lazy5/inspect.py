@@ -6,6 +6,9 @@ import numpy as _np
 
 from lazy5.utils import (FidOrFile as _FidOrFile)
 
+from lazy5.config import DefaultConfig
+_h5py.get_config().complex_names = DefaultConfig().complex_names
+
 __all__ = ['get_groups', 'get_datasets', 'get_hierarchy',
            'get_attrs_dset']
 
