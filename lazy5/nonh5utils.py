@@ -66,7 +66,6 @@ def check_type_compat(input_a, input_b):
     """
     return return_family_type(input_a) is return_family_type(input_b)
 
-
 def return_family_type(input_a):
     """ Return family of type input_a. int, float, complex, str, bytes, bool """
     a_type = None
