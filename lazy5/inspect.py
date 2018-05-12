@@ -5,7 +5,8 @@ from collections import OrderedDict as _OrderedDict
 import h5py as _h5py
 import numpy as _np
 
-from .utils import (FidOrFile as _FidOrFile, hdf_is_open as _hdf_is_open)
+from .utils import (FidOrFile as _FidOrFile, hdf_is_open as _hdf_is_open,
+                    fullpath as _fullpath)
 
 from .config import DefaultConfig
 _h5py.get_config().complex_names = DefaultConfig().complex_names
@@ -13,7 +14,7 @@ _h5py.get_config().complex_names = DefaultConfig().complex_names
 __all__ = ['get_groups', 'get_datasets', 'get_hierarchy',
            'get_attrs_dset', 'valid_dsets', 'valid_file']
 
-def get_groups(file):
+def get_groups(file, pth=None):
     """
     Parameters
     ----------
@@ -27,8 +28,10 @@ def get_groups(file):
     Group2 is INSIDE Group1, it will return Group1, Group1/Group2 -- NOT Group2
     inidividually.
     """
+
+    fp = _fullpath(file, pth) 
     # Get fid for a file (str or open fid)
-    fof = _FidOrFile(file)
+    fof = _FidOrFile(fp)
     fid = fof.fid
 
     all_items_list = []
@@ -44,16 +47,21 @@ def get_groups(file):
 
     return grp_list
 
-def get_datasets(file, fulldsetpath=True):
+def get_datasets(file, pth=None, fulldsetpath=True):
     """
     Parameters
     ----------
 
     file : str or _h5py.File
         Filename or File-object for open HDF5 file
+
+    fulldsetpath : bool
+        Return just the dataset names with group names or not.
     """
+    fp = _fullpath(file, pth) 
+
     # Get fid for a file (str or open fid)
-    fof = _FidOrFile(file)
+    fof = _FidOrFile(fp)
     fid = fof.fid
 
     all_items_list = []
@@ -76,7 +84,7 @@ def get_datasets(file, fulldsetpath=True):
 
     return dset_list
 
-def get_hierarchy(file, fulldsetpath=False, grp_w_dset=False):
+def get_hierarchy(file, pth=None, fulldsetpath=False, grp_w_dset=False):
     """
     Return an ordered dictionary, where the keys are groups and the items are
     the datasets
@@ -101,9 +109,10 @@ def get_hierarchy(file, fulldsetpath=False, grp_w_dset=False):
         Group and dataset names
 
     """
+    fp = _fullpath(file, pth) 
 
     # Get fid for a file (str or open fid)
-    fof = _FidOrFile(file)
+    fof = _FidOrFile(fp)
     fid = fof.fid
 
     grp_list = get_groups(fid)
@@ -135,7 +144,7 @@ def get_hierarchy(file, fulldsetpath=False, grp_w_dset=False):
 
     return grp_dict
 
-def get_attrs_dset(file, dset, convert_to_str=True):
+def get_attrs_dset(file, dset, pth=None, convert_to_str=True):
     """
     Get dictionary of attribute values for a given dataset
 
@@ -157,9 +166,10 @@ def get_attrs_dset(file, dset, convert_to_str=True):
     OrderedDict : (key, value)
 
     """
+    fp = _fullpath(file, pth) 
 
     # Get fid for a file (str or open fid)
-    fof = _FidOrFile(file)
+    fof = _FidOrFile(fp)
     fid = fof.fid
 
     ds_attrs = fid[dset].attrs
@@ -186,29 +196,26 @@ def get_attrs_dset(file, dset, convert_to_str=True):
 
     return attr_dict
 
-def valid_file(filename, pth=None, verbose=False):
+def valid_file(file, pth=None, verbose=False):
     """ Validate whether a file exists (or if a fid, is-open """
 
-    if isinstance(filename, _h5py.File):  # fid
-        isvalid = _hdf_is_open(filename)
+    fp = _fullpath(file, pth) 
 
-    elif isinstance(filename, str):
+    if isinstance(fp, _h5py.File):  # fid
+        isvalid = _hdf_is_open(fp)
 
-        if not pth:
-            pth = './'
-        fname_long = _os.path.join(pth, filename)
-
-        isvalid = _os.path.isfile(fname_long)
+    elif isinstance(file, str):
+        isvalid = _os.path.isfile(fp)
 
         if verbose:
             if isvalid:
-                print('{} is a valid file.'.format(fname_long))
+                print('{} is a valid file.'.format(fp))
             else:
-                print('{} is a not valid file.'.format(fname_long))
+                print('{} is a not valid file.'.format(fp))
 
     return isvalid
 
-def valid_dsets(filename, dset_list, pth=None, verbose=False):
+def valid_dsets(file, dset_list, pth=None, verbose=False):
     """ Check whether 1 or more datasets are valid """
 
     def _rem_leading_slash(str_to_check):
@@ -218,12 +225,12 @@ def valid_dsets(filename, dset_list, pth=None, verbose=False):
         else:
             return str_to_check
 
-    file_is_valid = valid_file(filename, pth=pth, verbose=verbose)
+    file_is_valid = valid_file(file, pth=pth, verbose=verbose)
 
     if not file_is_valid:
         return False
 
-    dset_in_file = get_datasets(filename, fulldsetpath=True)
+    dset_in_file = get_datasets(file, pth=pth, fulldsetpath=True)
 
     if isinstance(dset_list, (list, tuple)):
         hits = 0

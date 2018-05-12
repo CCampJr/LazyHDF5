@@ -1,11 +1,13 @@
 """ Utility functions """
+import os as _os
+
 import h5py as _h5py
 import numpy as _np
 
 from .config import DefaultConfig
 _h5py.get_config().complex_names = DefaultConfig().complex_names
 
-__all__ = ['FidOrFile', 'hdf_is_open']
+__all__ = ['FidOrFile', 'hdf_is_open', 'fullpath']
 
 class FidOrFile:
     """
@@ -78,3 +80,9 @@ def hdf_is_open(fid):
     else:
         return None
 
+def fullpath(filename, pth=None):
+    """ Return a full path by joining a pth and filename """
+    if not pth:
+        return filename
+    else:
+        return _os.path.join(pth, filename)

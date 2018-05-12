@@ -1,13 +1,13 @@
 """ Macros for inspection of HDF5 files """
 import h5py as _h5py
 
-from .utils import (FidOrFile as _FidOrFile)
+from .utils import (FidOrFile as _FidOrFile, fullpath as _fullpath)
 from .nonh5utils import (check_type_compat as _check_type_compat)
 
 from .config import DefaultConfig
 _h5py.get_config().complex_names = DefaultConfig().complex_names
 
-def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
+def alter_attr(dset, attr_key, attr_val, file=None, pth=None, verbose=False,
                check_same_type=False, must_exist=False):
     """
     Alter attribute dset['attr_key'] with attr_val.
@@ -27,6 +27,9 @@ def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
     file : str or h5py.File
         Filename or File-object for open HDF5 file
 
+    pth : str
+        Path
+
     verbose : bool
         Verbose output to stdout
 
@@ -43,8 +46,9 @@ def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
     """
 
     if file is not None:
+        fp = _fullpath(file, pth)
         # Get fid for a file (str or open fid)
-        fof = _FidOrFile(file, mode='r+')  # Read/write, file must exist
+        fof = _FidOrFile(fp, mode='r+')  # Read/write, file must exist
         fid = fof.fid
         if isinstance(dset, str):
             dset_object = fid[dset]
@@ -85,7 +89,7 @@ def alter_attr(dset, attr_key, attr_val, file=None, verbose=False,
     if fof is not None:
         fof.close_if_file_not_fid()
 
-def alter_attr_same(dset, attr_key, attr_val, file=None, verbose=True,
+def alter_attr_same(dset, attr_key, attr_val, file=None, pth=None, verbose=True,
                     must_exist=False):
     """
     Alter attribute dset['attr_key] with attr_val checkint to make sure that
@@ -107,6 +111,9 @@ def alter_attr_same(dset, attr_key, attr_val, file=None, verbose=True,
     file : str or h5py.File
         Filename or File-object for open HDF5 file
 
+    pth : str
+        Path
+
     verbose : bool
         Verbose output to stdout
 
@@ -114,7 +121,7 @@ def alter_attr_same(dset, attr_key, attr_val, file=None, verbose=True,
     -----
     None
     """
-    return alter_attr(dset, attr_key, attr_val, file, verbose,
+    return alter_attr(dset, attr_key, attr_val, file, pth, verbose,
                       check_same_type=True, must_exist=must_exist)
 
 def write_attr_dict(dset, attr_dict, fid=None, sort_attrs=False, verbose=False):

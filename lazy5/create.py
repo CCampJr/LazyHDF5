@@ -2,13 +2,13 @@
 import h5py as _h5py
 
 from .config import DefaultConfig
-from .utils import (FidOrFile as _FidOrFile)
+from .utils import (FidOrFile as _FidOrFile, fullpath as _fullpath)
 from .inspect import (valid_dsets as _valid_dsets)
 from .alter import (write_attr_dict as _write_attr_dict)
 
 _h5py.get_config().complex_names = DefaultConfig().complex_names
 
-def save(filename, dset, data, pth=None, attr_dict=None, mode='a',
+def save(file, dset, data, pth=None, attr_dict=None, mode='a',
          dset_overwrite=False, sort_attrs=False,
          chunks=True, verbose=False):
     """
@@ -17,7 +17,7 @@ def save(filename, dset, data, pth=None, attr_dict=None, mode='a',
     Parameters
     ----------
 
-    filename : str or h5py.File object (fid)
+    file : str or h5py.File object (fid)
         Filename
 
     dset : str
@@ -54,7 +54,8 @@ def save(filename, dset, data, pth=None, attr_dict=None, mode='a',
 
     """
 
-    fof = _FidOrFile(filename, mode=mode)
+    fp = _fullpath(file, pth) 
+    fof = _FidOrFile(file, mode=mode)
     fid = fof.fid
 
     if not dset_overwrite:
