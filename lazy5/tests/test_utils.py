@@ -6,7 +6,7 @@ import pytest
 import h5py
 import numpy as np
 
-from lazy5.utils import (FidOrFile, hdf_is_open)
+from lazy5.utils import (FidOrFile, hdf_is_open, fullpath)
 
 @pytest.fixture(scope="module")
 def hdf_dataset():
@@ -64,3 +64,17 @@ def test_hdf_is_open(hdf_dataset):
     fid.close()
 
     assert not hdf_is_open(fid)
+
+def test_fullpath():
+    """ Test full path """
+    fp = fullpath(filename=None,pth=None)
+    assert fp is None
+
+    fn = 'test.XYZ'
+    p = 'Dir1/Dir2'
+
+    fp = fullpath(filename=fn,pth=None)
+    assert fp == fn
+
+    fp = fullpath(filename=fn, pth=p)
+    assert fp == os.path.join(p, fn)
