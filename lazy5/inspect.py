@@ -144,7 +144,7 @@ def get_hierarchy(file, pth=None, fulldsetpath=False, grp_w_dset=False):
 
     return grp_dict
 
-def get_attrs_dset(file, dset, pth=None, convert_to_str=True):
+def get_attrs_dset(file, dset, pth=None, convert_to_str=True, convert_sgl_np_to_num=False):
     """
     Get dictionary of attribute values for a given dataset
 
@@ -160,6 +160,10 @@ def get_attrs_dset(file, dset, pth=None, convert_to_str=True):
     convert_to_str : bool
         If an attribute is a numpy.bytes_ string-like object, but not a str, try
         to decode into utf-8.
+
+    convert_sgl_np_to_num : bool
+        If an attribute is a numpy array with a single entry, convert to non-numpy
+        numeric type. E.g. np.array([1.0]) -> 1.0
 
     Returns
     -------
@@ -187,8 +191,11 @@ def get_attrs_dset(file, dset, pth=None, convert_to_str=True):
         else:
             if isinstance(attr_val, _np.ndarray):
                 if (isinstance(attr_val, _np.bytes_) | (attr_val.dtype.type == _np.bytes_)) & convert_to_str: # pylint: disable=no-member
+                    # * tostring() added in \x00 to end of string; thus, used list comprehension
                     np_byte_to_str = [q for q in attr_val][0].decode()
                     attr_list.append([k, np_byte_to_str])
+                elif (_np.issubdtype(attr_val.dtype, _np.number) & (attr_val.size == 1)) & convert_sgl_np_to_num:
+                    attr_list.append([k, attr_val.item()])
                 else:
                     attr_list.append([k, attr_val])
             elif isinstance(attr_val, bytes) & convert_to_str:

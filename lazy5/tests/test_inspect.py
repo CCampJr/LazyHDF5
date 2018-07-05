@@ -5,6 +5,7 @@ import h5py
 import pytest
 
 import numpy as np
+from numpy.testing import assert_array_almost_equal
 
 from lazy5.inspect import (get_groups, get_datasets, get_hierarchy,
                            get_attrs_dset, valid_dsets, valid_file)
@@ -41,6 +42,10 @@ def hdf_dataset():
     fid['base'].attrs.create('Attribute_float', 1.1)
     fid['base'].attrs.create('Attribute_np_1d', np.array([1, 2, 3]))
     fid['base'].attrs.create('Attribute_np_2d', np.array([[1, 2, 3], [4, 5, 6]]))
+    fid['base'].attrs.create('Attribute_np_sgl_int', np.array([1]))
+    fid['base'].attrs.create('Attribute_np_sgl_float', np.array([1.0]))
+    fid['base'].attrs.create('Attribute_np_array_float', np.array([1.0, 2.0]))
+    fid['base'].attrs.create('Attribute_np_sgl_complex', np.array([1.0 + 1j]))
 
     yield filename, fid
 
@@ -146,7 +151,6 @@ def test_get_datasets_nopath(hdf_dataset):  # pylint:disable=redefined-outer-nam
     assert set(dataset_list) == {'base', 'ingroup1_1', 'ingroup1_2', 'ingroup2',
                                  'ingroup3', 'ingroup6'}
 
-
 def test_get_hierarchy_fullpath(hdf_dataset):  # pylint:disable=redefined-outer-name
     """
     OrderedDict describing HDF5 file hierarchy. Testing with full paths in
@@ -175,7 +179,6 @@ def test_get_hierarchy_fullpath(hdf_dataset):  # pylint:disable=redefined-outer-
                          'Group4/Group5':[],
                          'Group4/Group5/Group6':['Group4/Group5/Group6/ingroup6']
                         }
-
 
 def test_get_hierarchy_grp_w_dset(hdf_dataset):  # pylint:disable=redefined-outer-name
     """
@@ -230,8 +233,8 @@ def test_get_hierarchy_nopath(hdf_dataset):  # pylint:disable=redefined-outer-na
                          'Group2/Group3':['ingroup3'],
                          'Group4':[],
                          'Group4/Group5':[],
-                         'Group4/Group5/Group6':['ingroup6']
-                        }
+                         'Group4/Group5/Group6':['ingroup6']}
+
 
 def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     """ Get an HDF5 file's dataset list with groupnames prepended"""
@@ -250,6 +253,10 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
     assert np.allclose(dset_attrs['Attribute_np_2d'], np.array([[1, 2, 3], [4, 5, 6]]))
+    assert dset_attrs['Attribute_np_sgl_int'] == np.array([1])
+    assert dset_attrs['Attribute_np_sgl_float'] == np.array([1.0])
+    assert dset_attrs['Attribute_np_sgl_complex'] == np.array([1.0 + 1j])
+    assert_array_almost_equal(dset_attrs['Attribute_np_array_float'], np.array([1.0, 2.0]))
 
     # DO CONVERT-to-STR
     dset_attrs = get_attrs_dset(fid, 'base', convert_to_str=True)
@@ -262,6 +269,10 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
     assert np.allclose(dset_attrs['Attribute_np_2d'], np.array([[1, 2, 3], [4, 5, 6]]))
+    assert dset_attrs['Attribute_np_sgl_int'] == np.array([1])
+    assert dset_attrs['Attribute_np_sgl_float'] == np.array([1.0])
+    assert dset_attrs['Attribute_np_sgl_complex'] == np.array([1.0 + 1j])
+    assert_array_almost_equal(dset_attrs['Attribute_np_array_float'], np.array([1.0, 2.0]))
 
     # Passing filename
     # DO NOT CONVERT-to-STR
@@ -275,6 +286,10 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
     assert np.allclose(dset_attrs['Attribute_np_2d'], np.array([[1, 2, 3], [4, 5, 6]]))
+    assert dset_attrs['Attribute_np_sgl_int'] == np.array([1])
+    assert dset_attrs['Attribute_np_sgl_float'] == np.array([1.0])
+    assert dset_attrs['Attribute_np_sgl_complex'] == np.array([1.0 + 1j])
+    assert_array_almost_equal(dset_attrs['Attribute_np_array_float'], np.array([1.0, 2.0]))
 
     # DO CONVERT-to-STR
     dset_attrs = get_attrs_dset(filename, 'base', convert_to_str=True)
@@ -287,3 +302,35 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
     assert np.allclose(dset_attrs['Attribute_np_2d'], np.array([[1, 2, 3], [4, 5, 6]]))
+    assert dset_attrs['Attribute_np_sgl_int'] == np.array([1])
+    assert dset_attrs['Attribute_np_sgl_float'] == np.array([1.0])
+    assert dset_attrs['Attribute_np_sgl_complex'] == np.array([1.0 + 1j])
+    assert_array_almost_equal(dset_attrs['Attribute_np_array_float'], np.array([1.0, 2.0]))
+
+    # CONVERT Single Numpy Value to Numeric 
+    dset_attrs = get_attrs_dset(filename, 'base', convert_sgl_np_to_num=True)
+    assert dset_attrs['Attribute_np_sgl_int'] == 1
+    assert isinstance(dset_attrs['Attribute_np_sgl_int'], int)
+    assert not isinstance(dset_attrs['Attribute_np_sgl_int'], np.ndarray)
+    assert dset_attrs['Attribute_np_sgl_float'] == 1.0
+    assert isinstance(dset_attrs['Attribute_np_sgl_float'], float)
+    assert not isinstance(dset_attrs['Attribute_np_sgl_float'], np.ndarray)
+    assert dset_attrs['Attribute_np_sgl_complex'] == 1.0 + 1j
+    assert isinstance(dset_attrs['Attribute_np_sgl_complex'], complex)
+    assert not isinstance(dset_attrs['Attribute_np_sgl_complex'], np.ndarray)
+    assert_array_almost_equal(dset_attrs['Attribute_np_array_float'], np.array([1.0, 2.0]))
+    assert isinstance(dset_attrs['Attribute_np_array_float'], np.ndarray)
+
+    # DO NOT CONVERT Single Numpy Value to Numeric 
+    dset_attrs = get_attrs_dset(filename, 'base', convert_sgl_np_to_num=False)
+    assert dset_attrs['Attribute_np_sgl_int'] == 1
+    assert not isinstance(dset_attrs['Attribute_np_sgl_int'], int)
+    assert isinstance(dset_attrs['Attribute_np_sgl_int'], np.ndarray)
+    assert dset_attrs['Attribute_np_sgl_float'] == 1.0
+    assert not isinstance(dset_attrs['Attribute_np_sgl_float'], float)
+    assert isinstance(dset_attrs['Attribute_np_sgl_float'], np.ndarray)
+    assert dset_attrs['Attribute_np_sgl_complex'] == 1.0 + 1j
+    assert not isinstance(dset_attrs['Attribute_np_sgl_complex'], complex)
+    assert isinstance(dset_attrs['Attribute_np_sgl_complex'], np.ndarray)
+    assert_array_almost_equal(dset_attrs['Attribute_np_array_float'], np.array([1.0, 2.0]))
+    assert isinstance(dset_attrs['Attribute_np_array_float'], np.ndarray)
