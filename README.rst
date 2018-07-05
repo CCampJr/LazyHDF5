@@ -181,14 +181,29 @@ then left open.
     for k in hierarchy:
         print('{} : {}'.format(k, hierarchy[k]))
     
-4. PyQt5 HDF5 file viewer
+4. Ordered dictionary of dataset attributes
+
+.. code:: python
+
+    from lazy5.inspect import get_attrs_dset
+
+    filename = 'SomeFile.h5'
+    dsetname = '/Group/SomeDataset'
+
+    attr_dict = get_attrs_dset(filename, dsetname)
+
+    print('Dataset Attributes:')
+    for k in attr_dict:
+        print('{} : {}'.format(k, attr_dict[k]))
+    
+5. PyQt5 HDF5 file viewer
 
 .. code::
 
     # From the command line 
     python ./lazy5/ui/QtHdfLoad.py
 
-5. PyQt5 HDF5 file viewer (programmatically)
+6. PyQt5 HDF5 file viewer (programmatically)
 
 .. code:: python
 
