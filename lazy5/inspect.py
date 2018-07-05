@@ -29,7 +29,7 @@ def get_groups(file, pth=None):
     inidividually.
     """
 
-    fp = _fullpath(file, pth) 
+    fp = _fullpath(file, pth)
     # Get fid for a file (str or open fid)
     fof = _FidOrFile(fp)
     fid = fof.fid
@@ -58,7 +58,7 @@ def get_datasets(file, pth=None, fulldsetpath=True):
     fulldsetpath : bool
         Return just the dataset names with group names or not.
     """
-    fp = _fullpath(file, pth) 
+    fp = _fullpath(file, pth)
 
     # Get fid for a file (str or open fid)
     fof = _FidOrFile(fp)
@@ -109,7 +109,7 @@ def get_hierarchy(file, pth=None, fulldsetpath=False, grp_w_dset=False):
         Group and dataset names
 
     """
-    fp = _fullpath(file, pth) 
+    fp = _fullpath(file, pth)
 
     # Get fid for a file (str or open fid)
     fof = _FidOrFile(fp)
@@ -166,7 +166,7 @@ def get_attrs_dset(file, dset, pth=None, convert_to_str=True):
     OrderedDict : (key, value)
 
     """
-    fp = _fullpath(file, pth) 
+    fp = _fullpath(file, pth)
 
     # Get fid for a file (str or open fid)
     fof = _FidOrFile(fp)
@@ -185,7 +185,13 @@ def get_attrs_dset(file, dset, pth=None, convert_to_str=True):
             print('Could not get value for attribute: {}. Set to None'.format(k))
             attr_list.append([k, None])
         else:
-            if (isinstance(attr_val, _np.bytes_) | isinstance(attr_val, bytes)) & convert_to_str: # pylint: disable=no-member
+            if isinstance(attr_val, _np.ndarray):
+                if (isinstance(attr_val, _np.bytes_) | (attr_val.dtype.type == _np.bytes_)) & convert_to_str: # pylint: disable=no-member
+                    np_byte_to_str = [q for q in attr_val][0].decode()
+                    attr_list.append([k, np_byte_to_str])
+                else:
+                    attr_list.append([k, attr_val])
+            elif isinstance(attr_val, bytes) & convert_to_str:
                 attr_list.append([k, attr_val.decode()])
             else:
                 attr_list.append([k, attr_val])
@@ -199,7 +205,7 @@ def get_attrs_dset(file, dset, pth=None, convert_to_str=True):
 def valid_file(file, pth=None, verbose=False):
     """ Validate whether a file exists (or if a fid, is-open """
 
-    fp = _fullpath(file, pth) 
+    fp = _fullpath(file, pth)
 
     if isinstance(fp, _h5py.File):  # fid
         isvalid = _hdf_is_open(fp)

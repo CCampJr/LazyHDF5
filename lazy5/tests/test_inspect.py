@@ -35,6 +35,8 @@ def hdf_dataset():
     fid['base'].attrs['Attribute_str'] = 'Test'
     fid['base'].attrs['Attribute_bytes'] = b'Test'
     fid['base'].attrs['Attribute_np_bytes'] = np.bytes_('Test') # pylint: disable=no-member
+    fid['base'].attrs['Attribute_np_bytes_inarray'] = np.array(b'Test') # pylint: disable=no-member
+    fid['base'].attrs['Attribute_np_bytes_inarray2'] = np.array([b'Test']) # pylint: disable=no-member
     fid['base'].attrs.create('Attribute_int', 1)
     fid['base'].attrs.create('Attribute_float', 1.1)
     fid['base'].attrs.create('Attribute_np_1d', np.array([1, 2, 3]))
@@ -242,6 +244,8 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_str'] == 'Test'
     assert dset_attrs['Attribute_bytes'] == b'Test'
     assert dset_attrs['Attribute_np_bytes'] == b'Test'
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray'] == b'Test', True)
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray2'] == b'Test', True)
     assert dset_attrs['Attribute_int'] == 1
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
@@ -252,6 +256,8 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_str'] == 'Test'
     assert dset_attrs['Attribute_bytes'] == 'Test'
     assert dset_attrs['Attribute_np_bytes'] == 'Test'
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray'] == 'Test', True)
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray2'] == 'Test', True)
     assert dset_attrs['Attribute_int'] == 1
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
@@ -263,6 +269,8 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_str'] == 'Test'
     assert dset_attrs['Attribute_bytes'] == b'Test'
     assert dset_attrs['Attribute_np_bytes'] == b'Test'
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray'] == b'Test', True)
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray2'] == b'Test', True)
     assert dset_attrs['Attribute_int'] == 1
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
@@ -273,6 +281,8 @@ def test_get_dset_attrs(hdf_dataset):  # pylint:disable=redefined-outer-name
     assert dset_attrs['Attribute_str'] == 'Test'
     assert dset_attrs['Attribute_bytes'] == 'Test'
     assert dset_attrs['Attribute_np_bytes'] == 'Test'
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray'] == 'Test', True)
+    assert np.allclose(dset_attrs['Attribute_np_bytes_inarray2'] == 'Test', True)
     assert dset_attrs['Attribute_int'] == 1
     assert dset_attrs['Attribute_float'] == 1.1
     assert np.allclose(dset_attrs['Attribute_np_1d'], np.array([1, 2, 3]))
