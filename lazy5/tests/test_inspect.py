@@ -1,5 +1,6 @@
 """ Test inspection of HDF5 files """
 import os
+import time
 
 import h5py
 import pytest
@@ -52,7 +53,12 @@ def hdf_dataset():
     # Tear-down
     if hdf_is_open(fid):
         fid.close()
-    os.remove(filename)
+    
+    time.sleep(1)
+    try:
+        os.remove(filename)
+    except:
+        print('Could not delete {}'.format(filename))
 
 def test_valid_file(hdf_dataset):  # pylint:disable=redefined-outer-name
     """ Test whether a file is valid or not """

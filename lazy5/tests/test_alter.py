@@ -1,5 +1,6 @@
 """ Test inspection of HDF5 files """
 import os
+import time
 
 from collections import OrderedDict as _OrderedDict
 
@@ -45,7 +46,13 @@ def hdf_dataset():
     # Tear-down
     if hdf_is_open(fid):
         fid.close()
-    os.remove(filename)
+
+    time.sleep(1)
+    try:
+        os.remove(filename)
+    except:
+        print('Could not delete {}'.format(filename))
+
 
 def test_attr_alter_same(hdf_dataset):
     """ Try altering an attribute with the same type of value type """
