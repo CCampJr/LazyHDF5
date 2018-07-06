@@ -58,10 +58,14 @@ def get_datasets(file, pth=None, fulldsetpath=True):
     fulldsetpath : bool
         Return just the dataset names with group names or not.
     """
-    fp = _fullpath(file, pth)
+    
+    if isinstance(file, str):
+        fp = _fullpath(file, pth)
+        fof = _FidOrFile(fp)
 
-    # Get fid for a file (str or open fid)
-    fof = _FidOrFile(fp)
+    else:
+        fof = _FidOrFile(file)
+
     fid = fof.fid
 
     all_items_list = []
@@ -212,12 +216,8 @@ def get_attrs_dset(file, dset, pth=None, convert_to_str=True, convert_sgl_np_to_
 def valid_file(file, pth=None, verbose=False):
     """ Validate whether a file exists (or if a fid, is-open """
 
-    fp = _fullpath(file, pth)
-
-    if isinstance(fp, _h5py.File):  # fid
-        isvalid = _hdf_is_open(fp)
-
-    elif isinstance(file, str):
+    if isinstance(file, str):
+        fp = _fullpath(file, pth)
         isvalid = _os.path.isfile(fp)
 
         if verbose:
@@ -226,6 +226,11 @@ def valid_file(file, pth=None, verbose=False):
             else:
                 print('{} is a not valid file.'.format(fp))
 
+    elif isinstance(file, _h5py.File):
+        isvalid = _hdf_is_open(file)
+    else:
+        raise TypeError('file need be of type str or h5py.File object.')
+    
     return isvalid
 
 def valid_dsets(file, dset_list, pth=None, verbose=False):

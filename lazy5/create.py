@@ -54,8 +54,14 @@ def save(file, dset, data, pth=None, attr_dict=None, mode='a',
 
     """
 
-    fp = _fullpath(file, pth) 
-    fof = _FidOrFile(file, mode=mode)
+    if isinstance(file, str):
+        fp = _fullpath(file, pth)
+        fof = _FidOrFile(fp, mode=mode)
+    elif isinstance(file, _h5py.File):
+        fof = _FidOrFile(file, mode=mode)
+    else:
+        raise TypeError('file needs to be a str or h5py.File object.')
+        
     fid = fof.fid
 
     if not dset_overwrite:
