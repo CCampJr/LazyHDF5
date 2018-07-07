@@ -41,7 +41,7 @@ for installation) that displaces groups, datasets, and attributes.
 
 -   Editing
 
-    - Write/alter/re-write attributes (coming soon)
+    - Write/alter/re-write attributes
     - Repack datasets (coming soon)
     - Copy datasets and files
 
