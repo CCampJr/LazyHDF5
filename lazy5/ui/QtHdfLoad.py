@@ -80,17 +80,23 @@ class HdfLoad(_QDialog): ### EDIT ###
 
         # pragma: no cover
         dialog = HdfLoad(parent)
-        ret_fileopen = dialog.fileOpen(pth)
 
-        ret = None
-        if ret_fileopen:
-            ret_dset_select = dialog.exec_()
-            if ret_dset_select == _QDialog.Rejected:
-                pass
-            elif dialog.all_selected is None:
-                pass
-            else:
-                ret = (dialog.path, dialog.filename, dialog.all_selected)
+        ret_fileopen = True
+        pth = _os.path.abspath(pth)
+
+        while True:
+            ret_fileopen = dialog.fileOpen(pth)
+
+            ret = None
+            if ret_fileopen:
+                ret_dset_select = dialog.exec_()
+                if ret_dset_select == _QDialog.Rejected:
+                    pth = dialog.path
+                elif dialog.all_selected is None:
+                    pass
+                else:
+                    ret = (dialog.path, dialog.filename, dialog.all_selected)
+                    break
         return ret
 
     def fileOpen(self, pth='./'):  # Qt-related pylint: disable=C0103
@@ -98,7 +104,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
         if pth is None:
             pth = './'
-            
+
         if _os.path.isdir(pth):  # No file provided, use QFileDialog; # pragma: no cover
             filetype_options = 'HDF5 Files (*.h5 *.hdf);;All Files (*.*)'
             full_pth_fname, _ = _QFileDialog.getOpenFileName(self, 'Open H5 File', pth,
@@ -132,7 +138,9 @@ class HdfLoad(_QDialog): ### EDIT ###
 
         #self.dsetlist = QListWidget(self.verticalLayoutWidget)
         self.ui.listDataSet.clear()
-        self.ui.listDataSet.addItems(self.group_dset_dict[self.ui.comboBoxGroupSelect.currentText()])
+
+        if self.ui.comboBoxGroupSelect.currentText() != '':
+            self.ui.listDataSet.addItems(self.group_dset_dict[self.ui.comboBoxGroupSelect.currentText()])
         #print('Changed')
 
     def populate_attrs(self, attr_dict=None):
