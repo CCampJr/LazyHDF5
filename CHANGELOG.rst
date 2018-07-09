@@ -2,7 +2,7 @@
 Changelog
 =========
 
-0.2.0 ()
+0.2.0 (18-07-09)
 --------
 
 - Alter attributes with and without ensuring same type
