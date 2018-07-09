@@ -1,5 +1,5 @@
 include *.rst
+include */ui/qt5/*.ui
 include LICENSE.md
 include README.rst
 include CHANGELOG.rst
-recursive-include Examples *
