@@ -97,6 +97,8 @@ class HdfLoad(_QDialog): ### EDIT ###
                 else:
                     ret = (dialog.path, dialog.filename, dialog.all_selected)
                     break
+            else:
+                break
         return ret
 
     def fileOpen(self, pth='./'):  # Qt-related pylint: disable=C0103
