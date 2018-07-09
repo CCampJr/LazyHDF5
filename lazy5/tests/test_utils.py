@@ -6,7 +6,7 @@ import pytest
 import h5py
 import numpy as np
 
-from lazy5.utils import FidOrFile, hdf_is_open
+from lazy5.utils import (FidOrFile, hdf_is_open, fullpath)
 
 @pytest.fixture(scope="module")
 def hdf_dataset():
@@ -26,23 +26,23 @@ def hdf_dataset():
 
 def test_fid_or_file_filename_provided(hdf_dataset):
     """ Test FidOrFile Class with provided filename """
-    filename, fid = hdf_dataset
+    filename, _ = hdf_dataset
 
     fof = FidOrFile(filename)
     assert fof.fid.fid.valid == 1
     assert fof.fid is not None
-    assert fof.is_fid == False
+    assert not fof.is_fid
 
     fof.fid.close()
 
 def test_fid_or_file_fid_provided(hdf_dataset):
     """ Test FidOrFile Class with provided fid """
-    filename, fid = hdf_dataset
+    _, fid = hdf_dataset
 
     fof = FidOrFile(fid)
     assert fof.fid.fid.valid == 1
     assert fof.fid is not None
-    assert fof.is_fid == True
+    assert fof.is_fid
 
 def test_fid_or_file_close_if_not_fid(hdf_dataset):
     """ Test close if filename was provided """
@@ -58,10 +58,23 @@ def test_fid_or_file_close_if_not_fid(hdf_dataset):
 
 def test_hdf_is_open(hdf_dataset):
     """ Test hdf_is_open function """
-    filename, fid = hdf_dataset
+    _, fid = hdf_dataset
 
-    assert hdf_is_open(fid) == True
+    assert hdf_is_open(fid)
     fid.close()
-    
-    assert hdf_is_open(fid) == False
 
+    assert not hdf_is_open(fid)
+
+def test_fullpath():
+    """ Test full path """
+    fp = fullpath(filename=None,pth=None)
+    assert fp is None
+
+    fn = 'test.XYZ'
+    p = 'Dir1/Dir2'
+
+    fp = fullpath(filename=fn,pth=None)
+    assert fp == fn
+
+    fp = fullpath(filename=fn, pth=p)
+    assert fp == os.path.join(p, fn)
