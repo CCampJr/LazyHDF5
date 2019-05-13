@@ -2,8 +2,9 @@
 Changelog
 =========
 
-0.2.1 ()
+0.2.1 (2019)
 -----------------
+-   Address compatibility with Matplotlib 2.*/3.*
 
 0.2.0 (18-07-09)
 -----------------
