@@ -1,10 +1,10 @@
 .. -*- mode: rst -*-
 
-.. image:: https://img.shields.io/travis/CCampJr/LazyHDF5/0.3.X.svg
+.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=0.3.X
     :alt: Travis branch
     :target: https://travis-ci.org/CCampJr/LazyHDF5
 
-.. image:: https://img.shields.io/appveyor/ci/CCampJr/LazyHDF5/0.3.X.svg
+.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/0.3.X?svg=true
     :alt: AppVeyor branch
     :target: https://ci.appveyor.com/project/CCampJr/LazyHDF5
 
