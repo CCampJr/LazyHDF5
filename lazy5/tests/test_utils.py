@@ -29,7 +29,14 @@ def test_fid_or_file_filename_provided(hdf_dataset):
     filename, _ = hdf_dataset
 
     fof = FidOrFile(filename)
-    assert fof.fid.fid.valid == 1
+    
+    # ! New h5py v 2.9.*: id instead of fid
+    try:
+        status = fof.fid.id.valid
+    except AttributeError:
+        status = fof.fid.fid.valid
+
+    assert status == 1
     assert fof.fid is not None
     assert not fof.is_fid
 
@@ -40,7 +47,13 @@ def test_fid_or_file_fid_provided(hdf_dataset):
     _, fid = hdf_dataset
 
     fof = FidOrFile(fid)
-    assert fof.fid.fid.valid == 1
+    # ! New h5py v 2.9.*: id instead of fid
+    try:
+        status = fof.fid.id.valid
+    except AttributeError:
+        status = fof.fid.fid.valid
+
+    assert status == 1
     assert fof.fid is not None
     assert fof.is_fid
 
@@ -50,11 +63,23 @@ def test_fid_or_file_close_if_not_fid(hdf_dataset):
 
     fof = FidOrFile(fid)
     fof.close_if_file_not_fid()
-    assert fof.fid.fid.valid == 1
+    # ! New h5py v 2.9.*: id instead of fid
+    try:
+        status = fof.fid.id.valid
+    except AttributeError:
+        status = fof.fid.fid.valid
+
+    assert status == 1
 
     fof = FidOrFile(filename)
     fof.close_if_file_not_fid()
-    assert fof.fid.fid.valid == 0
+    # ! New h5py v 2.9.*: id instead of fid
+    try:
+        status = fof.fid.id.valid
+    except AttributeError:
+        status = fof.fid.fid.valid
+
+    assert status == 0
 
 def test_hdf_is_open(hdf_dataset):
     """ Test hdf_is_open function """

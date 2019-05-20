@@ -4,7 +4,8 @@ Changelog
 
 0.2.1 (2019)
 -----------------
--   Minor bug fix
+-   Bug fixes and tweeks for Python and H5Py library compatibility across versions
+-   Testing on Python 3.4, 3.5, 3.6, and 3.7
 
 0.2.0 (18-07-09)
 -----------------
