@@ -1,10 +1,10 @@
 .. -*- mode: rst -*-
 
-.. image:: https://img.shields.io/travis/CCampJr/LazyHDF5/master.svg
+.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=master
     :alt: Travis branch
     :target: https://travis-ci.org/CCampJr/LazyHDF5
 
-.. image:: https://img.shields.io/appveyor/ci/CCampJr/LazyHDF5/master.svg
+.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/master?svg=true
     :alt: AppVeyor branch
     :target: https://ci.appveyor.com/project/CCampJr/LazyHDF5
 
@@ -61,7 +61,7 @@ packages may work.
     
     - Tested with 1.12.1, 1.13.1, 1.13.3
 
--   h5py (2.7.0)
+-   h5py (>=2.6.0)
 
 Optional Dependencies
 ---------------------

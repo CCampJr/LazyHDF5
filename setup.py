@@ -8,7 +8,7 @@ with open('README.rst') as f:
     long_description = f.read()
 
 setup(name='LazyHDF5',
-      version = '0.2.0',
+      version = '0.2.1rc1',
       description = 'Python Macros for h5py... because I\'m lazy',
       long_description = long_description,
       url = 'https://github.com/CCampJr/LazyHDF5',
@@ -18,7 +18,7 @@ setup(name='LazyHDF5',
       packages = find_packages(),
       zip_safe = False,
       include_package_data = True,
-      install_requires=['numpy', 'h5py'],
+      install_requires=['numpy', 'h5py>= 2.6.0'],
       setup_requires=['pytest-runner'],
       tests_require=['pytest'],
       classifiers=['Development Status :: 3 - Alpha',

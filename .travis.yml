@@ -12,13 +12,13 @@ matrix:
     sudo: false
     python: '3.5'
   - os: linux
-    dist: trusty
+    dist: xenial
     sudo: false
     python: '3.6'
   - os: linux
-    dist: trusty
+    dist: xenial
     sudo: false
-    python: 3.6-dev
+    python: 3.7
 cache:
   apt: true
   pip: true
@@ -52,9 +52,9 @@ install:
   # then conda install --yes python=$TRAVIS_PYTHON_VERSION pip numpy scipy;
   # fi
 # - pip install pytest-cov
-# - if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]];
-#   then pip install codecov;
-#   fi
+- if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]];
+  then pip install h5py==2.6.0;
+  fi
 - python setup.py install
 # - python setup.py sdist
 # - cd $TRAVIS_BUILD_DIR/docs/

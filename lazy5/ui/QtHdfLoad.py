@@ -82,7 +82,10 @@ class HdfLoad(_QDialog): ### EDIT ###
         dialog = HdfLoad(parent)
 
         ret_fileopen = True
-        pth = _os.path.abspath(pth)
+        if pth is None:
+            pth = './'
+        else:
+            pth = _os.path.abspath(pth)
 
         while True:
             ret_fileopen = dialog.fileOpen(pth)

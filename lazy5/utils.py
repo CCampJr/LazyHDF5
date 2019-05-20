@@ -72,7 +72,12 @@ class FidOrFile:
 
 def hdf_is_open(fid):
     """ Is an HDF file open via fid """
-    status = fid.fid.valid
+    # ! New h5py v 2.9.*: id instead of fid
+    try:
+        status = fid.id.valid
+    except AttributeError:
+        status = fid.fid.valid
+
     if status == 0:
         return False
     elif status == 1:
