@@ -61,7 +61,7 @@ packages may work.
     
     - Tested with 1.12.1, 1.13.1, 1.13.3
 
--   h5py (2.7.0)
+-   h5py (>=2.6.0)
 
 Optional Dependencies
 ---------------------
