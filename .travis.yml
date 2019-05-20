@@ -53,7 +53,7 @@ install:
   # fi
 # - pip install pytest-cov
 - if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]];
-  then pip install h5py==2.5.0;
+  then pip install h5py==2.6.0;
   fi
 - python setup.py install
 # - python setup.py sdist
