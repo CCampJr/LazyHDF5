@@ -1,14 +1,14 @@
 .. -*- mode: rst -*-
 
-.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=0.2.X
+.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=master
     :alt: Travis branch
     :target: https://travis-ci.org/CCampJr/LazyHDF5
 
-.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/0.2.X?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/master?svg=true
     :alt: AppVeyor branch
     :target: https://ci.appveyor.com/project/CCampJr/LazyHDF5
 
-.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/0.2.X.svg
+.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/master.svg
     :alt: Codecov branch
     :target: https://codecov.io/gh/CCampJr/LazyHDF5
 
@@ -22,7 +22,7 @@
 
 .. image:: https://img.shields.io/badge/License-NIST%20Public%20Domain-green.svg
     :alt: NIST Public Domain
-    :target: https://github.com/CCampJr/LazyHDF5/blob/0.2.X/LICENSE.md
+    :target: https://github.com/CCampJr/LazyHDF5/blob/master/LICENSE.md
 
 LazyHDF5: Python Macros for h5py... because I'm lazy
 ===============================================================
