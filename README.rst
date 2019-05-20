@@ -1,14 +1,14 @@
 .. -*- mode: rst -*-
 
-.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=master
+.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=0.2.X
     :alt: Travis branch
     :target: https://travis-ci.org/CCampJr/LazyHDF5
 
-.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/master?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/0.2.X?svg=true
     :alt: AppVeyor branch
     :target: https://ci.appveyor.com/project/CCampJr/LazyHDF5
 
-.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/master.svg
+.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/0.2.X.svg
     :alt: Codecov branch
     :target: https://codecov.io/gh/CCampJr/LazyHDF5
 

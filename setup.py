@@ -8,7 +8,7 @@ with open('README.rst') as f:
     long_description = f.read()
 
 setup(name='LazyHDF5',
-      version = '0.2.1',
+      version = '0.2.2a0',
       description = 'Python Macros for h5py... because I\'m lazy',
       long_description = long_description,
       url = 'https://github.com/CCampJr/LazyHDF5',
