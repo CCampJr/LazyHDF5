@@ -2,7 +2,7 @@
 Changelog
 =========
 
-0.2.1 (2019)
+0.2.1 (19-05-20)
 -----------------
 -   Bug fixes and tweeks for Python and H5Py library compatibility across versions
 -   Testing on Python 3.4, 3.5, 3.6, and 3.7
