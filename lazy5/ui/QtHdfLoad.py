@@ -54,6 +54,7 @@ class HdfLoad(_QDialog): ### EDIT ###
         self.all_selected = None
         self.group_dset_dict = None
 
+        
         self.ui.pushButtonOk.clicked.connect(self.accept)
         self.ui.pushButtonCancel.clicked.connect(self.reject)
         self.ui.comboBoxGroupSelect.currentTextChanged.connect(self.dataGroupChange)
@@ -63,7 +64,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
 
     @staticmethod
-    def getFileDataSets(pth='./', parent=None):  # pylint: disable=C0103; # pragma: no cover
+    def getFileDataSets(pth='./', title=None, parent=None):  # pylint: disable=C0103; # pragma: no cover
         """
         Retrieve the filename and datasets selected by the user (via GUI)
 
@@ -79,7 +80,7 @@ class HdfLoad(_QDialog): ### EDIT ###
         """
 
         # pragma: no cover
-        dialog = HdfLoad(parent)
+        dialog = HdfLoad(parent=parent)
 
         ret_fileopen = True
         if pth is None:
@@ -88,7 +89,7 @@ class HdfLoad(_QDialog): ### EDIT ###
             pth = _os.path.abspath(pth)
 
         while True:
-            ret_fileopen = dialog.fileOpen(pth)
+            ret_fileopen = dialog.fileOpen(pth, title=title)
 
             ret = None
             if ret_fileopen:
@@ -104,15 +105,18 @@ class HdfLoad(_QDialog): ### EDIT ###
                 break
         return ret
 
-    def fileOpen(self, pth='./'):  # Qt-related pylint: disable=C0103
+    def fileOpen(self, pth='./', title='Open H5 File'):  # Qt-related pylint: disable=C0103
         """ Select HDF5 File via QDialog built-in."""
 
         if pth is None:
             pth = './'
 
+        if title is None:
+            title='Open H5 File'
+
         if _os.path.isdir(pth):  # No file provided, use QFileDialog; # pragma: no cover
             filetype_options = 'HDF5 Files (*.h5 *.hdf);;All Files (*.*)'
-            full_pth_fname, _ = _QFileDialog.getOpenFileName(self, 'Open H5 File', pth,
+            full_pth_fname, _ = _QFileDialog.getOpenFileName(self, title, pth,
                                                              filetype_options)
         elif _os.path.isfile(pth):  # Is a valid file
             full_pth_fname = pth
@@ -219,7 +223,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
 if __name__ == '__main__':  # pragma: no cover
     app = _QApplication(_sys.argv)  # pylint: disable=C0103
-    result = HdfLoad.getFileDataSets(pth='.')  # pylint: disable=C0103
+    result = HdfLoad.getFileDataSets(pth='.', title='Get the file')  # pylint: disable=C0103
     print('Result: {}'.format(result))
 
     _sys.exit()
