@@ -61,6 +61,22 @@ class TestUI:
         os.remove(filename)
         # sys.exit()
 
+    def test_ui_win_title_empty_load_dataset(self, hdf_dataset):
+        """ Test whether load dataset dialog is titled properly with no title provided"""
+        self.filename = hdf_dataset
+        dialog = HdfLoad()
+        _ = dialog.fileOpen(self.filename)
+
+        assert dialog.windowTitle() == 'Select a dataset...'
+
+    def test_ui_win_title_load_dataset(self, hdf_dataset):
+        """ Test whether load dataset dialog is titled properly """
+        self.filename = hdf_dataset
+        dialog = HdfLoad(title='TEST')
+        _ = dialog.fileOpen(self.filename)
+
+        assert dialog.windowTitle() == 'TEST: Select a dataset...'
+
     def test_ui_load_file(self, hdf_dataset):
         """ Load test file and check groups """
         self.filename = hdf_dataset

@@ -5,6 +5,7 @@ import time
 import pytest
 
 import numpy as np
+import h5py
 
 from lazy5.create import save
 from lazy5.utils import FidOrFile
@@ -73,3 +74,30 @@ def test_save_diff_path():
 
     os.remove(fp)
     os.rmdir(pth)
+
+def test_save_to_open_h5_file():
+    """ Test saving to an H5 file where the H5 file id is passed """
+
+    data = np.random.randn(20,20)
+    filename = 'temp_create2.h5'
+    dset_name = '/Group1/Dset'
+    
+    pth = './temp_test'
+    os.mkdir(pth)
+    assert os.path.isdir(pth)
+
+    fp = os.path.join(pth, filename)
+    with h5py.File(fp, 'w') as fid:
+        save(fid, dset_name, data, pth=pth, mode='w')
+
+    assert os.path.isfile(fp)
+    assert os.path.getsize(fp) >= data.nbytes
+
+    os.remove(fp)
+    os.rmdir(pth)
+
+def test_save_to_open_wrong_type():
+    """ Test saving to an inappripriate input (not string or h5 file fid) """
+
+    with pytest.raises(TypeError):
+        save(123, 'Name', np.random.rand(10,10), pth=None, mode='w')

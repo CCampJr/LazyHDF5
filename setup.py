@@ -3,12 +3,15 @@
 """
 
 from setuptools import setup, find_packages
+import lazy5
 
 with open('README.rst') as f:
     long_description = f.read()
 
+print('Version: {}'.format(lazy5.__version__))
+
 setup(name='LazyHDF5',
-      version = '0.2.1',
+      version = lazy5.__version__,
       description = 'Python Macros for h5py... because I\'m lazy',
       long_description = long_description,
       url = 'https://github.com/CCampJr/LazyHDF5',
@@ -30,6 +33,7 @@ setup(name='LazyHDF5',
                    'Programming Language :: Python :: 3.4',
                    'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7',
                    'Topic :: Scientific/Engineering',
                    'Topic :: Database',
                    'Topic :: Software Development :: Libraries :: Python Modules'
