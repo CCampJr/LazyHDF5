@@ -7,6 +7,7 @@ Changelog
 
 - Minor tweeks and bug fixes
 - Name HDF5 Load UI Dialog
+- __version__ global variable set in __init__
 
 0.2.1 (19-05-20)
 -----------------
