@@ -1,25 +1,5 @@
 .. -*- mode: rst -*-
 
-.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=master
-    :alt: Travis branch
-    :target: https://travis-ci.org/CCampJr/LazyHDF5
-
-.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/master?svg=true
-    :alt: AppVeyor branch
-    :target: https://ci.appveyor.com/project/CCampJr/LazyHDF5
-
-.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/master.svg
-    :alt: Codecov branch
-    :target: https://codecov.io/gh/CCampJr/LazyHDF5
-
-.. image:: https://img.shields.io/pypi/pyversions/LazyHDF5.svg
-    :alt: PyPI - Python Version
-    :target: https://pypi.org/project/LazyHDF5/
-
-.. image:: https://img.shields.io/pypi/v/LazyHDF5.svg
-    :alt: PyPI
-    :target: https://pypi.org/project/LazyHDF5/
-
 .. image:: https://img.shields.io/badge/License-NIST%20Public%20Domain-green.svg
     :alt: NIST Public Domain
     :target: https://github.com/CCampJr/LazyHDF5/blob/master/LICENSE.md

@@ -193,10 +193,16 @@ class HdfLoad(_QDialog): ### EDIT ###
 
             selection_str = '{} + ({} others)'.format(current_selection, n_selected - 1)
             self.ui.textCurrentDataset.setText(selection_str)
-            current_dset_fullpath = '{}/{}'.format(current_grp, current_selection)
+            if current_grp == '/':
+                current_dset_fullpath = '{}{}'.format(current_grp, current_selection)
+            else:
+                current_dset_fullpath = '{}/{}'.format(current_grp, current_selection)
+            # TODO: Figure out a better way to deal with base-group datasets
+            # Bug when dsets are in base group '/'
+            current_dset_fullpath = current_dset_fullpath.replace('//','/')
             attrs = get_attrs_dset(_os.path.join(self.path, self.filename),
                                    current_dset_fullpath, convert_to_str=True)
-            self.all_selected = ['{}/{}'.format(current_grp, selection.text())
+            self.all_selected = [('{}/{}'.format(current_grp, selection.text())).replace('//','/')
                                  for selection in all_selected]
 
         # Fill-in attribute table

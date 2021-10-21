@@ -35,7 +35,7 @@ def get_groups(file, pth=None):
     fid = fof.fid
 
     all_items_list = []
-    fid.visit(all_items_list.append)
+    fid.visit(lambda x: all_items_list.append('/{}'.format(x)))
 
     # list-set-list removes duplicates
     grp_list = list(set([item for item in all_items_list if isinstance(fid[item], _h5py.Group)]))
@@ -69,7 +69,7 @@ def get_datasets(file, pth=None, fulldsetpath=True):
     fid = fof.fid
 
     all_items_list = []
-    fid.visit(all_items_list.append)
+    fid.visit(lambda x: all_items_list.append('/{}'.format(x)))
     dset_list = []
 
     # list-set-list removes duplicates
@@ -126,8 +126,11 @@ def get_hierarchy(file, pth=None, fulldsetpath=False, grp_w_dset=False):
 
     for dset in dset_list:
         split_out = dset.rsplit('/', maxsplit=1)
-        if len(split_out) == 1:
-            grp_dict['/'].append(dset)
+        if (len(split_out) == 1) or (split_out[0] == ''):
+            if dset[0] == '/':
+                grp_dict['/'].append(dset[1:])
+            else:
+                grp_dict['/'].append(dset)
         else:
             if fulldsetpath:
                 grp_dict[split_out[0]].append(dset)
@@ -236,12 +239,12 @@ def valid_file(file, pth=None, verbose=False):
 def valid_dsets(file, dset_list, pth=None, verbose=False):
     """ Check whether 1 or more datasets are valid """
 
-    def _rem_leading_slash(str_to_check):
+    def _add_leading_slash(str_to_check):
         """ Return string sans leading '/' if there is one """
         if str_to_check[0] == '/':
-            return str_to_check[1:]
-        else:
             return str_to_check
+        else:
+            return '/' + str_to_check
 
     file_is_valid = valid_file(file, pth=pth, verbose=verbose)
 
@@ -253,7 +256,7 @@ def valid_dsets(file, dset_list, pth=None, verbose=False):
     if isinstance(dset_list, (list, tuple)):
         hits = 0
         for dset in dset_list:
-            dset_to_test = _rem_leading_slash(dset)
+            dset_to_test = _add_leading_slash(dset)
             if dset_in_file.count(dset_to_test) > 0:
                 hits += 1
                 if verbose:
@@ -270,7 +273,7 @@ def valid_dsets(file, dset_list, pth=None, verbose=False):
                 print('Some or all datasets are NOT valid')
             return False
     elif isinstance(dset_list, str):
-        if dset_in_file.count(_rem_leading_slash(dset_list)) > 0:
+        if dset_in_file.count(_add_leading_slash(dset_list)) > 0:
             if verbose:
                 print('{} : VALID'.format(dset_list))
             return True
