@@ -42,7 +42,7 @@ class HdfLoad(_QDialog): ### EDIT ###
               'excl_filtering' : True  # Filtering is exclusive (filters are AND'd)
              }
 
-    def __init__(self, parent=None):
+    def __init__(self, title=None, parent=None):
 
         # Generic load/init designer-based GUI
         super(HdfLoad, self).__init__(parent)
@@ -54,6 +54,11 @@ class HdfLoad(_QDialog): ### EDIT ###
         self.all_selected = None
         self.group_dset_dict = None
 
+        if title:
+            self.setWindowTitle('{}: Select a dataset...'.format(title))
+        else:
+            self.setWindowTitle('Select a dataset...')
+
         self.ui.pushButtonOk.clicked.connect(self.accept)
         self.ui.pushButtonCancel.clicked.connect(self.reject)
         self.ui.comboBoxGroupSelect.currentTextChanged.connect(self.dataGroupChange)
@@ -63,7 +68,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
 
     @staticmethod
-    def getFileDataSets(pth='./', parent=None):  # pylint: disable=C0103; # pragma: no cover
+    def getFileDataSets(pth='./', title=None, parent=None):  # pylint: disable=C0103; # pragma: no cover
         """
         Retrieve the filename and datasets selected by the user (via GUI)
 
@@ -79,7 +84,7 @@ class HdfLoad(_QDialog): ### EDIT ###
         """
 
         # pragma: no cover
-        dialog = HdfLoad(parent)
+        dialog = HdfLoad(title=title, parent=parent)
 
         ret_fileopen = True
         if pth is None:
@@ -88,7 +93,7 @@ class HdfLoad(_QDialog): ### EDIT ###
             pth = _os.path.abspath(pth)
 
         while True:
-            ret_fileopen = dialog.fileOpen(pth)
+            ret_fileopen = dialog.fileOpen(pth, title=title)
 
             ret = None
             if ret_fileopen:
@@ -104,15 +109,20 @@ class HdfLoad(_QDialog): ### EDIT ###
                 break
         return ret
 
-    def fileOpen(self, pth='./'):  # Qt-related pylint: disable=C0103
+    def fileOpen(self, pth='./', title=None):  # Qt-related pylint: disable=C0103
         """ Select HDF5 File via QDialog built-in."""
 
         if pth is None:
             pth = './'
 
+        if title is None:
+            title_file='Select a file...'
+        else:
+            title_file='{}: Select a file...'.format(title)
+
         if _os.path.isdir(pth):  # No file provided, use QFileDialog; # pragma: no cover
             filetype_options = 'HDF5 Files (*.h5 *.hdf);;All Files (*.*)'
-            full_pth_fname, _ = _QFileDialog.getOpenFileName(self, 'Open H5 File', pth,
+            full_pth_fname, _ = _QFileDialog.getOpenFileName(self, title_file, pth,
                                                              filetype_options)
         elif _os.path.isfile(pth):  # Is a valid file
             full_pth_fname = pth
@@ -183,10 +193,16 @@ class HdfLoad(_QDialog): ### EDIT ###
 
             selection_str = '{} + ({} others)'.format(current_selection, n_selected - 1)
             self.ui.textCurrentDataset.setText(selection_str)
-            current_dset_fullpath = '{}/{}'.format(current_grp, current_selection)
+            if current_grp == '/':
+                current_dset_fullpath = '{}{}'.format(current_grp, current_selection)
+            else:
+                current_dset_fullpath = '{}/{}'.format(current_grp, current_selection)
+            # TODO: Figure out a better way to deal with base-group datasets
+            # Bug when dsets are in base group '/'
+            current_dset_fullpath = current_dset_fullpath.replace('//','/')
             attrs = get_attrs_dset(_os.path.join(self.path, self.filename),
                                    current_dset_fullpath, convert_to_str=True)
-            self.all_selected = ['{}/{}'.format(current_grp, selection.text())
+            self.all_selected = [('{}/{}'.format(current_grp, selection.text())).replace('//','/')
                                  for selection in all_selected]
 
         # Fill-in attribute table
@@ -219,7 +235,7 @@ class HdfLoad(_QDialog): ### EDIT ###
 
 if __name__ == '__main__':  # pragma: no cover
     app = _QApplication(_sys.argv)  # pylint: disable=C0103
-    result = HdfLoad.getFileDataSets(pth='.')  # pylint: disable=C0103
+    result = HdfLoad.getFileDataSets(pth='.', title='Test title')  # pylint: disable=C0103
     print('Result: {}'.format(result))
 
     _sys.exit()

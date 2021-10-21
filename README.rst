@@ -1,28 +1,8 @@
 .. -*- mode: rst -*-
 
-.. image:: https://travis-ci.org/CCampJr/LazyHDF5.svg?branch=0.3.X
-    :alt: Travis branch
-    :target: https://travis-ci.org/CCampJr/LazyHDF5
-
-.. image:: https://ci.appveyor.com/api/projects/status/evs3iim45m8vqcq7/branch/0.3.X?svg=true
-    :alt: AppVeyor branch
-    :target: https://ci.appveyor.com/project/CCampJr/LazyHDF5
-
-.. image:: https://img.shields.io/codecov/c/github/CCampJr/LazyHDF5/0.3.X.svg
-    :alt: Codecov branch
-    :target: https://codecov.io/gh/CCampJr/LazyHDF5
-
-.. image:: https://img.shields.io/pypi/pyversions/LazyHDF5.svg
-    :alt: PyPI - Python Version
-    :target: https://pypi.org/project/LazyHDF5/
-
-.. image:: https://img.shields.io/pypi/v/LazyHDF5.svg
-    :alt: PyPI
-    :target: https://pypi.org/project/LazyHDF5/
-
 .. image:: https://img.shields.io/badge/License-NIST%20Public%20Domain-green.svg
     :alt: NIST Public Domain
-    :target: https://github.com/CCampJr/LazyHDF5/blob/0.3.X/LICENSE.md
+    :target: https://github.com/CCampJr/LazyHDF5/blob/master/LICENSE.md
 
 LazyHDF5: Python Macros for h5py... because I'm lazy
 ===============================================================
@@ -61,7 +41,7 @@ packages may work.
     
     - Tested with 1.12.1, 1.13.1, 1.13.3
 
--   h5py (2.7.0)
+-   h5py (>=2.6.0)
 
 Optional Dependencies
 ---------------------

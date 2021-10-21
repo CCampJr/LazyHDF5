@@ -61,6 +61,22 @@ class TestUI:
         os.remove(filename)
         # sys.exit()
 
+    def test_ui_win_title_empty_load_dataset(self, hdf_dataset):
+        """ Test whether load dataset dialog is titled properly with no title provided"""
+        self.filename = hdf_dataset
+        dialog = HdfLoad()
+        _ = dialog.fileOpen(self.filename)
+
+        assert dialog.windowTitle() == 'Select a dataset...'
+
+    def test_ui_win_title_load_dataset(self, hdf_dataset):
+        """ Test whether load dataset dialog is titled properly """
+        self.filename = hdf_dataset
+        dialog = HdfLoad(title='TEST')
+        _ = dialog.fileOpen(self.filename)
+
+        assert dialog.windowTitle() == 'TEST: Select a dataset...'
+
     def test_ui_load_file(self, hdf_dataset):
         """ Load test file and check groups """
         self.filename = hdf_dataset
@@ -74,10 +90,10 @@ class TestUI:
                      range(dialog.ui.comboBoxGroupSelect.count())]
 
         assert list_dsets == ['base']
-        assert 'Group1' in list_grps
-        assert 'Group2/Group3' in list_grps
-        assert 'Group4/Group5/Group6' in list_grps
-        assert 'Group5' not in list_grps
+        assert '/Group1' in list_grps
+        assert '/Group2/Group3' in list_grps
+        assert '/Group4/Group5/Group6' in list_grps
+        assert '/Group5' not in list_grps
 
     def test_ui_change_grp_and_filter_include(self, hdf_dataset):
         """ Load test file, change to Group1, filter for _1 """
@@ -89,7 +105,7 @@ class TestUI:
         dialog.ui.comboBoxGroupSelect.setCurrentIndex(1)
         list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
                       range(dialog.ui.listDataSet.count())]
-        assert dialog.ui.comboBoxGroupSelect.currentText() == 'Group1'
+        assert dialog.ui.comboBoxGroupSelect.currentText() == '/Group1'
         assert list_dsets == ['ingroup1_1', 'ingroup1_2']
 
         dialog.ui.filterIncludeString.setText('_1')
@@ -108,7 +124,7 @@ class TestUI:
         dialog.ui.comboBoxGroupSelect.setCurrentIndex(1)
         list_dsets = [dialog.ui.listDataSet.item(num).text() for num in
                       range(dialog.ui.listDataSet.count())]
-        assert dialog.ui.comboBoxGroupSelect.currentText() == 'Group1'
+        assert dialog.ui.comboBoxGroupSelect.currentText() == '/Group1'
         assert list_dsets == ['ingroup1_1', 'ingroup1_2']
 
         dialog.ui.filterExcludeString.setText('_1')
