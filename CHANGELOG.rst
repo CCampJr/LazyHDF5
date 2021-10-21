@@ -2,12 +2,14 @@
 Changelog
 =========
 
-0.2.3 ()
----------
+0.3.0 (21-10-21)
+----------------
 
+- **Groups now start with a forward slash**
+- Minor improvements and bug fixes
 
 0.2.2 (19-05-22)
----------
+----------------
 
 - Minor tweeks and bug fixes
 - Title parameter to name Load HDF UI's
